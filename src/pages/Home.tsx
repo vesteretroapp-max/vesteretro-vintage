@@ -80,25 +80,16 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* Right decorative */}
+          {/* Right decorative — Hero image */}
           <div className="relative">
             <div className="absolute -inset-6 -z-10 rounded-full bg-[var(--gold)]/10 blur-3xl" />
-            <div className="aspect-square w-full rounded-2xl border border-[var(--border-gold)] bg-gradient-to-br from-surface via-surface-2 to-background p-8 shadow-lg">
-              <div className="flex h-full flex-col items-center justify-center gap-6">
-                <Award className="h-16 w-16 text-[var(--gold)]" />
-                <p className="font-display text-3xl italic text-foreground/90">
-                  1970 · 1994 · 2002
-                </p>
-                <p className="text-center text-sm text-muted-foreground">
-                  Três títulos. Uma história.
-                  <br />
-                  Uma camisa para cada memória.
-                </p>
-                <div className="mt-4 h-px w-24 bg-[var(--gold)]/60" />
-                <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--gold)]">
-                  Coleção Copa do Mundo
-                </p>
-              </div>
+            <div className="w-full overflow-hidden rounded-2xl border border-[var(--border-gold)] shadow-lg">
+              <img
+                src="https://harmless-tapir-303.convex.cloud/api/storage/168d5986-3b6f-42f8-8ba8-732fe51aad9d"
+                alt="Camisas retrô dos grandes clubes do Brasil — Corinthians, Flamengo, Palmeiras e Vasco"
+                className="w-full h-auto object-cover"
+                loading="eager"
+              />
             </div>
           </div>
         </div>
