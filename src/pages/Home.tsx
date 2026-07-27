@@ -20,6 +20,12 @@ const EDITORIAL_IMAGES = [
 ];
 
 export default function Home() {
+  // Product slices for each section
+  const lancamentos = demoProducts.slice(0, 8);
+  const brasilProducts = demoProducts.filter((p) => p.category === "brasil").slice(0, 4);
+  const mundoProducts = demoProducts.filter((p) => p.category === "mundo").slice(0, 4);
+  const selecoesProducts = demoProducts.filter((p) => p.category === "selecoes").slice(0, 4);
+
   return (
     <div>
       {/* ============ HERO SECTION ============ */}
@@ -178,7 +184,85 @@ export default function Home() {
           </Link>
         </div>
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {demoProducts.slice(0, 4).map((product) => (
+          {lancamentos.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* ============ CLUBE BRASIL SECTION ============ */}
+      <section className="container-vr py-16">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+              Do Brasil com paixão
+            </p>
+            <h2 className="mt-2 font-display text-3xl md:text-4xl">
+              Do Brasil com paixão
+            </h2>
+          </div>
+          <Link
+            to="/clubes-do-brasil"
+            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
+          >
+            Ver todos
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {brasilProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* ============ CLUBE MUNDO SECTION ============ */}
+      <section className="container-vr py-16">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+              Europa e América em campo
+            </p>
+            <h2 className="mt-2 font-display text-3xl md:text-4xl">
+              Europa e América em campo
+            </h2>
+          </div>
+          <Link
+            to="/clubes-do-mundo"
+            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
+          >
+            Ver todos
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {mundoProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* ============ SELEÇÕES SECTION ============ */}
+      <section className="container-vr py-16">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+              Seleções eternas
+            </p>
+            <h2 className="mt-2 font-display text-3xl md:text-4xl">
+              Seleções eternas
+            </h2>
+          </div>
+          <Link
+            to="/selecoes"
+            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
+          >
+            Ver todos
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {selecoesProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
