@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import type { Product } from "@/data/products";
 
 interface ProductCardProps {
@@ -9,8 +9,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [imgError, setImgError] = useState(false);
 
   const discount = product.promotionalPrice
     ? Math.round(
@@ -23,7 +21,6 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     const cart = JSON.parse(localStorage.getItem("veste_cart") || "[]");
     const existing = cart.find(
       (item: any) => item.id === product.id && item.size === "M"
@@ -47,167 +44,112 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link
-      to={`/produto/${product.slug}`}
-      className="group block"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="product-card relative bg-[#111414] border border-[#D6A632]/10 rounded-sm overflow-hidden">
-        {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-[#090B0B]">
-          {!imgError ? (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className={`w-full h-full object-cover transition-all duration-700 ${
-                isHovered ? "scale-110 opacity-80" : "scale-100 opacity-100"
-              }`}
-              loading="lazy"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-[#181B1B]">
-              <div className="text-center">
-                <ShoppingBag className="w-8 h-8 text-[#D6A632]/40 mx-auto mb-2" />
-                <p className="text-[10px] text-[#9B9B9B]">{product.club}</p>
-              </div>
+    <div className="card-premium group relative flex flex-col overflow-hidden rounded-lg">
+      {/* Badges */}
+      {product.isBestSeller && (
+        <span className="absolute left-3 top-3 z-10 rounded-full border border-[var(--gold)]/50 bg-background/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--gold)] backdrop-blur">
+          Mais vendido
+        </span>
+      )}
+      {discount > 0 && (
+        <span className="absolute left-3 top-3 z-10 rounded-full border border-red-500/50 bg-red-500/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-white backdrop-blur">
+          -{discount}%
+        </span>
+      )}
+
+      {/* Favorite button */}
+      <button
+        aria-label="Favoritar"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsFavorited(!isFavorited);
+        }}
+        className="absolute right-3 top-3 z-10 rounded-full bg-background/70 p-2 text-muted-foreground backdrop-blur transition hover:text-[var(--gold)]"
+      >
+        <Heart
+          className={`h-4 w-4 ${
+            isFavorited ? "fill-[var(--gold)] text-[var(--gold)]" : ""
+          }`}
+        />
+      </button>
+
+      {/* Image */}
+      <Link to={`/produto/${product.slug}`}>
+        <div className="relative aspect-[4/5] overflow-hidden bg-surface-2">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-2 via-surface to-background p-6">
+            <svg
+              viewBox="0 0 120 130"
+              className="h-40 w-40 text-[var(--gold)]/70 transition group-hover:scale-105"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path
+                d="M20 20 L45 10 Q60 25 75 10 L100 20 L110 45 L90 55 L90 120 L30 120 L30 55 L10 45 Z"
+                fill="currentColor"
+                fillOpacity="0.08"
+              />
+            </svg>
+            <div className="text-center">
+              <p className="font-display text-lg text-foreground/90">
+                {product.club}
+              </p>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--gold)]">
+                {product.year}
+              </p>
             </div>
-          )}
-
-          {/* Hover overlay */}
-          <div
-            className={`absolute inset-0 bg-gradient-to-t from-[#090B0B]/90 via-transparent to-transparent transition-opacity duration-500 ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}
-          />
-
-          {/* Hover actions */}
-          <div
-            className={`absolute bottom-0 left-0 right-0 p-3 transition-all duration-500 ${
-              isHovered
-                ? "translate-y-0 opacity-100"
-                : "translate-y-4 opacity-0"
-            }`}
-          >
-            <div className="flex gap-2">
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 bg-[#D6A632] text-[#090B0B] text-[10px] font-semibold uppercase tracking-wider py-2.5 rounded-sm hover:bg-[#E8C56A] transition-colors"
-              >
-                Adicionar ao carrinho
-              </button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsFavorited(!isFavorited);
-                }}
-                className="w-9 h-9 bg-[#090B0B]/80 border border-[#D6A632]/30 rounded-sm flex items-center justify-center hover:bg-[#D6A632]/20 transition-colors"
-              >
-                <Heart
-                  className={`w-4 h-4 ${
-                    isFavorited
-                      ? "fill-[#D6A632] text-[#D6A632]"
-                      : "text-[#D4D4D4]"
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
-
-          {/* Badges */}
-          <div className="absolute top-2 left-2 flex flex-col gap-1">
-            {product.isNew && (
-              <span className="bg-[#D6A632] text-[#090B0B] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
-                Novo
-              </span>
-            )}
-            {product.isBestSeller && (
-              <span className="bg-[#090B0B] text-[#F8F5ED] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm border border-[#D6A632]/30">
-                Mais Vendido
-              </span>
-            )}
-            {discount > 0 && (
-              <span className="bg-[#C94B4B] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
-                -{discount}%
-              </span>
-            )}
-          </div>
-
-          {/* Quick view on desktop */}
-          <div
-            className={`absolute top-2 right-2 transition-all duration-300 ${
-              isHovered
-                ? "translate-x-0 opacity-100"
-                : "translate-x-4 opacity-0"
-            }`}
-          >
-            <span className="text-[9px] uppercase tracking-wider text-[#F8F5ED] bg-[#090B0B]/80 px-2 py-1 rounded-sm border border-[#D6A632]/20">
-              Ver detalhes
-            </span>
           </div>
         </div>
+      </Link>
 
-        {/* Info */}
-        <div className="p-3 space-y-1.5">
-          <div className="flex items-center gap-2">
-            <p className="text-[10px] uppercase tracking-wider text-[#D6A632] font-medium">
-              {product.club}
-            </p>
-            <span className="text-[9px] text-[#9B9B9B]">• {product.year}</span>
-          </div>
-
-          <h3 className="text-xs text-[#F8F5ED] leading-tight line-clamp-2 font-medium">
-            {product.name}
-          </h3>
-
-          {/* Rating */}
-          <div className="flex items-center gap-1">
-            <Star className="w-3 h-3 fill-[#D6A632] text-[#D6A632]" />
-            <span className="text-[10px] text-[#9B9B9B]">
-              {product.rating} ({product.reviewCount})
-            </span>
-          </div>
-
-          {/* Price */}
-          <div className="space-y-0.5">
+      {/* Info */}
+      <Link to={`/produto/${product.slug}`} className="flex flex-1 flex-col p-4">
+        <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          {product.club} · {product.year}
+        </p>
+        <h3 className="mt-1 line-clamp-2 font-sans text-sm font-medium text-foreground">
+          {product.name}
+        </h3>
+        <div className="mt-3 flex items-end justify-between">
+          <div>
             {product.promotionalPrice ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-[#9B9B9B] line-through">
+              <div>
+                <p className="text-xs text-muted-foreground line-through">
                   R$ {product.price.toFixed(2)}
-                </span>
-                <span className="text-sm font-bold text-[#D6A632]">
+                </p>
+                <p className="text-lg font-bold text-[var(--gold)]">
                   R$ {product.promotionalPrice.toFixed(2)}
-                </span>
+                </p>
               </div>
             ) : (
-              <span className="text-sm font-bold text-[#D6A632]">
+              <p className="text-lg font-bold text-[var(--gold)]">
                 R$ {product.price.toFixed(2)}
-              </span>
+              </p>
             )}
-            <p className="text-[9px] text-[#9B9B9B]">
+            <p className="text-[11px] text-muted-foreground">
               ou 12x de R$ {installmentPrice.toFixed(2)} sem juros
             </p>
           </div>
-
-          {/* Size indicators */}
-          <div className="flex gap-1 pt-1">
-            {product.sizes.slice(0, 5).map((s) => (
-              <span
-                key={s.size}
-                className={`text-[8px] px-1.5 py-0.5 rounded border ${
-                  s.stock > 0
-                    ? "border-[#D6A632]/30 text-[#D4D4D4]"
-                    : "border-[#C94B4B]/30 text-[#C94B4B] line-through"
-                }`}
-              >
-                {s.size}
-              </span>
-            ))}
-          </div>
         </div>
+      </Link>
+
+      {/* Actions */}
+      <div className="px-4 pb-4 flex gap-2">
+        <Link
+          to={`/produto/${product.slug}`}
+          className="flex-1 rounded-md border border-border py-2 text-center text-xs uppercase tracking-widest text-foreground/90 transition hover:border-[var(--gold)] hover:text-[var(--gold)]"
+        >
+          Ver detalhes
+        </Link>
+        <button
+          aria-label="Adicionar ao carrinho"
+          onClick={handleAddToCart}
+          className="rounded-md btn-gold px-3"
+        >
+          <ShoppingBag className="h-4 w-4" />
+        </button>
       </div>
-    </Link>
+    </div>
   );
 }

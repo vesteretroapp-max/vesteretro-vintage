@@ -32,13 +32,11 @@ export function WhatsAppButton({
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="whatsapp-pulse fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#111414] border border-[#D6A632]/40 text-[#F8F5ED] px-4 py-3 rounded-full shadow-lg hover:bg-[#181B1B] hover:border-[#D6A632] transition-all duration-300 group"
-      aria-label="Fale conosco pelo WhatsApp"
+      aria-label="Fale com a VesteRetro no WhatsApp"
+      className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-[var(--success)] px-4 py-3 text-sm font-semibold text-white shadow-2xl animate-pulse-gold hover:brightness-110 transition-all"
     >
-      <MessageCircle className="w-5 h-5 text-[#2EA66B] group-hover:scale-110 transition-transform" />
-      <span className="hidden lg:block text-xs whitespace-nowrap">
-        Fale com a VesteRetro
-      </span>
+      <MessageCircle className="h-5 w-5 shrink-0" />
+      <span className="hidden sm:inline">Fale com a VesteRetro</span>
     </a>
   );
 }

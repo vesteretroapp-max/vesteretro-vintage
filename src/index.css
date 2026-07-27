@@ -36,93 +36,55 @@
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-border: var(--sidebar-border);
+  --color-ring: var(--sidebar-ring);
 
-  /* VesteRetro custom palette */
-  --color-veste-black: #090B0B;
-  --color-veste-black-2: #111414;
-  --color-veste-graphite: #181B1B;
-  --color-veste-gold: #D6A632;
-  --color-veste-gold-light: #E8C56A;
-  --color-veste-gold-dark: #9A7020;
-  --color-veste-warm-white: #F8F5ED;
-  --color-veste-gray-light: #D4D4D4;
-  --color-veste-gray: #9B9B9B;
-  --color-veste-green: #2EA66B;
-  --color-veste-red: #C94B4B;
-
-  --font-serif: "Georgia", "Times New Roman", serif;
-  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
 }
 
 :root {
   --radius: 0.5rem;
-  --background: #F8F5ED;
-  --foreground: #090B0B;
-  --card: #FFFFFF;
-  --card-foreground: #090B0B;
-  --popover: #FFFFFF;
-  --popover-foreground: #090B0B;
-  --primary: #090B0B;
-  --primary-foreground: #F8F5ED;
-  --secondary: #D6A632;
-  --secondary-foreground: #090B0B;
-  --muted: #F0EDE4;
-  --muted-foreground: #9B9B9B;
-  --accent: #D6A632;
-  --accent-foreground: #090B0B;
-  --destructive: #C94B4B;
-  --border: #D4D4D4;
-  --input: #D4D4D4;
-  --ring: #D6A632;
-  --chart-1: #D6A632;
-  --chart-2: #9A7020;
-  --chart-3: #090B0B;
-  --chart-4: #E8C56A;
-  --chart-5: #C94B4B;
-  --sidebar: #090B0B;
-  --sidebar-foreground: #F8F5ED;
-  --sidebar-primary: #D6A632;
-  --sidebar-primary-foreground: #090B0B;
-  --sidebar-accent: #181B1B;
-  --sidebar-accent-foreground: #F8F5ED;
-  --sidebar-border: #181B1B;
-  --sidebar-ring: #D6A632;
-}
-
-.dark {
-  --background: #090B0B;
-  --foreground: #F8F5ED;
+  --background: #090b0b;
+  --foreground: #f8f5ed;
   --card: #111414;
-  --card-foreground: #F8F5ED;
+  --card-foreground: #f8f5ed;
   --popover: #111414;
-  --popover-foreground: #F8F5ED;
-  --primary: #D6A632;
-  --primary-foreground: #090B0B;
-  --secondary: #181B1B;
-  --secondary-foreground: #F8F5ED;
-  --muted: #181B1B;
-  --muted-foreground: #9B9B9B;
-  --accent: #D6A632;
-  --accent-foreground: #090B0B;
-  --destructive: #C94B4B;
-  --border: rgba(216, 216, 216, 0.1);
+  --popover-foreground: #f8f5ed;
+  --primary: #d6a632;
+  --primary-foreground: #090b0b;
+  --secondary: #181b1b;
+  --secondary-foreground: #f8f5ed;
+  --muted: #181b1b;
+  --muted-foreground: #9b9b9b;
+  --accent: #d6a632;
+  --accent-foreground: #090b0b;
+  --destructive: #c94b4b;
+  --border: rgba(216, 216, 216, 0.12);
   --input: rgba(216, 216, 216, 0.15);
-  --ring: #D6A632;
-  --chart-1: #D6A632;
-  --chart-2: #9A7020;
-  --chart-3: #E8C56A;
-  --chart-4: #F8F5ED;
-  --chart-5: #C94B4B;
-  --sidebar: #090B0B;
-  --sidebar-foreground: #F8F5ED;
-  --sidebar-primary: #D6A632;
-  --sidebar-primary-foreground: #090B0B;
-  --sidebar-accent: #181B1B;
-  --sidebar-accent-foreground: #F8F5ED;
-  --sidebar-border: #181B1B;
-  --sidebar-ring: #D6A632;
+  --ring: #d6a632;
+  --chart-1: #d6a632;
+  --chart-2: #9a7020;
+  --chart-3: #e8c56a;
+  --chart-4: #f8f5ed;
+  --chart-5: #c94b4b;
+  --sidebar: #090b0b;
+  --sidebar-foreground: #f8f5ed;
+  --sidebar-primary: #d6a632;
+  --sidebar-primary-foreground: #090b0b;
+  --sidebar-accent: #181b1b;
+  --sidebar-accent-foreground: #f8f5ed;
+  --sidebar-border: #181b1b;
+  --sidebar-ring: #d6a632;
+
+  /* Custom VesteRetro palette */
+  --gold: #d6a632;
+  --gold-dark: #9a7020;
+  --gold-light: #e8c56a;
+  --border-gold: rgba(214, 166, 50, 0.25);
+  --surface: #111414;
+  --surface-2: #181b1b;
+  --success: #22c55e;
 }
 
 @layer base {
@@ -138,26 +100,88 @@
   }
 }
 
-/* Vintage text effects */
-.vintage-text {
-  font-family: var(--font-serif);
-  letter-spacing: 0.02em;
+/* ======== CUSTOM UTILITIES ======== */
+
+/* Container */
+.container-vr {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  max-width: 80rem;
+}
+@media (min-width: 768px) {
+  .container-vr {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-vr {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
 }
 
-.gold-text {
-  color: #D6A632;
+/* Font display (Playfair Display) */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
-.gold-border {
-  border: 1px solid #D6A632;
+/* Gold button */
+.btn-gold {
+  background-color: var(--gold);
+  color: #090b0b;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-gold:hover {
+  background-color: var(--gold-light);
 }
 
-.gold-border-bottom {
-  border-bottom: 2px solid #D6A632;
+/* Gold outline button */
+.btn-outline-gold {
+  border: 1px solid var(--border-gold);
+  color: #f8f5ed;
+  transition: all 0.2s ease;
+}
+.btn-outline-gold:hover {
+  border-color: var(--gold);
+  background-color: rgba(214, 166, 50, 0.08);
 }
 
-.text-shadow-subtle {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+/* Premium card */
+.card-premium {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+.card-premium:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 4px 20px rgba(214, 166, 50, 0.06);
+}
+
+/* Gold text gradient */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pulse animation for WhatsApp */
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(214, 166, 50, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(214, 166, 50, 0);
+  }
+}
+.animate-pulse-gold {
+  animation: pulse-gold 2s infinite;
 }
 
 /* Scrollbar styling */
@@ -165,64 +189,11 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090B0B;
+  background: #090b0b;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D6A632;
+  background: var(--gold);
   border-radius: 3px;
-}
-
-/* Mega menu */
-.mega-menu-content {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-/* Vintage paper texture */
-.vintage-paper {
-  background-color: #F8F5ED;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-}
-
-/* Gold shimmer animation */
-@keyframes goldShimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-.gold-shimmer {
-  background: linear-gradient(
-    90deg,
-    #D6A632 0%,
-    #E8C56A 25%,
-    #D6A632 50%,
-    #E8C56A 75%,
-    #D6A632 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: goldShimmer 3s linear infinite;
-}
-
-/* Product card hover */
-.product-card {
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(214, 166, 50, 0.08);
-}
-
-/* Button pulse animation for WhatsApp */
-@keyframes pulse-subtle {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(214, 166, 50, 0.4); }
-  50% { box-shadow: 0 0 0 12px rgba(214, 166, 50, 0); }
-}
-
-.whatsapp-pulse {
-  animation: pulse-subtle 2s infinite;
 }
 
 /* Smooth scroll */
@@ -232,30 +203,12 @@ html {
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid #D6A632;
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
-/* Category card hover */
-.category-card {
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  overflow: hidden;
-}
-.category-card:hover img {
-  transform: scale(1.08);
-}
-.category-card img {
-  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Price styling */
-.price-current {
-  color: #D6A632;
-  font-weight: 700;
-}
-
-.price-old {
-  color: #9B9B9B;
-  text-decoration: line-through;
-  font-size: 0.875rem;
+/* Blur backdrop support */
+.backdrop-blur {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
