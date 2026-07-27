@@ -1,43 +1,82 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Trash2 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { demoProducts } from "@/data/products";
 
+interface FavoriteItem {
+  productId: string;
+  addedAt: number;
+}
+
 export default function Favorites() {
-  const [favorites] = useState(demoProducts.slice(0, 3));
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("veste_favorites");
+    if (stored) {
+      try {
+        const items: FavoriteItem[] = JSON.parse(stored);
+        setFavoriteIds(items.map((i) => i.productId));
+      } catch {
+        setFavoriteIds([]);
+      }
+    }
+  }, []);
+
+  const products = demoProducts.filter((p) => favoriteIds.includes(p.id));
+
+  const clearFavorites = () => {
+    localStorage.removeItem("veste_favorites");
+    setFavoriteIds([]);
+    window.dispatchEvent(new Event("favorites-updated"));
+  };
 
   return (
     <div className="min-h-screen bg-[#090B0B]">
-      <div className="bg-[#111414] border-b border-[#D6A632]/10">
-        <div className="max-w-7xl mx-auto px-4 py-8 lg:py-12">
-          <h1 className="vintage-text text-3xl lg:text-4xl font-bold text-[#F8F5ED]">
-            Meus{" "}
-            <span className="gold-text">Favoritos</span>
-          </h1>
+      <div className="bg-surface border-b border-border">
+        <div className="container-vr py-8 lg:py-12">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground">
+                Meus <span className="text-[var(--gold)]">Favoritos</span>
+              </h1>
+              <p className="text-sm text-muted-foreground mt-2">
+                {products.length} {products.length === 1 ? "produto salvo" : "produtos salvos"}
+              </p>
+            </div>
+            {products.length > 0 && (
+              <button
+                onClick={clearFavorites}
+                className="flex items-center gap-1.5 text-xs text-destructive hover:text-destructive/80 transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Limpar todos
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {favorites.length === 0 ? (
+      <div className="container-vr py-8">
+        {products.length === 0 ? (
           <div className="text-center py-20">
-            <Heart className="w-16 h-16 text-[#D6A632]/30 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-[#F8F5ED] mb-2">
-              Nenhum favorito ainda
-            </h2>
-            <p className="text-sm text-[#9B9B9B] mb-6">
-              Salve seus produtos favoritos para comprar depois.
+            <Heart className="w-16 h-16 text-[var(--gold)]/20 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-foreground mb-2">Nenhum favorito ainda</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Salve seus produtos favoritos clicando no ícone de coração e encontre-os aqui.
             </p>
             <Link
               to="/todos-os-produtos"
-              className="inline-flex items-center gap-2 bg-[#D6A632] text-[#090B0B] px-6 py-3 text-sm font-semibold uppercase tracking-wider rounded-sm hover:bg-[#E8C56A] transition-all"
+              className="btn-gold rounded-md px-6 py-3 text-sm font-semibold uppercase tracking-wider inline-flex items-center gap-2"
             >
               Explorar produtos
+              <ShoppingBag className="w-4 h-4" />
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-            {favorites.map((product) => (
+            {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

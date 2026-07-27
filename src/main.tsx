@@ -27,21 +27,40 @@ const Tracking = lazy(() => import("./pages/Tracking.tsx"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
-// Static page components
-function StaticPagePlaceholder({ title }: { title: string }) {
+// Lazy loaded static pages
+const SobrePage = lazy(() => import("./pages/StaticPages.tsx").then(m => ({ default: m.SobrePage })));
+const ContatoPage = lazy(() => import("./pages/StaticPages.tsx").then(m => ({ default: m.ContatoPage })));
+const FAQPage = lazy(() => import("./pages/StaticPages.tsx").then(m => ({ default: m.FAQPage })));
+const GuiaTamanhosPage = lazy(() => import("./pages/StaticPages.tsx").then(m => ({ default: m.GuiaTamanhosPage })));
+
+// Generic policy page placeholder (can be expanded later)
+function PolicyPlaceholder({ title }: { title: string }) {
   return (
     <div className="min-h-screen bg-[#090B0B]">
-      <div className="bg-[#111414] border-b border-[#D6A632]/10">
-        <div className="max-w-4xl mx-auto px-4 py-12 lg:py-16 text-center">
-          <h1 className="vintage-text text-3xl lg:text-4xl font-bold text-[#F8F5ED]">
+      <div className="bg-surface border-b border-border">
+        <div className="container-vr py-12 lg:py-16 text-center">
+          <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground">
             {title}
           </h1>
         </div>
       </div>
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <p className="text-sm text-[#9B9B9B] font-serif italic">
-          Esta página está sendo atualizada. Em breve você encontrará todas as informações completas aqui.
-        </p>
+      <div className="container-vr py-12">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-sm text-muted-foreground mb-6">
+            Esta página está sendo atualizada com as informações oficiais da VesteRetro.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Enquanto isso, entre em contato conosco pelo WhatsApp para tirar suas dúvidas.
+          </p>
+          <a
+            href="https://wa.me/5511987516823"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-4 text-sm text-[var(--gold)] hover:underline transition-colors"
+          >
+            Fale conosco no WhatsApp
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -171,15 +190,15 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/rastreamento" element={<Tracking />} />
                 
                 {/* Static pages */}
-                <Route path="/sobre" element={<StaticPagePlaceholder title="Sobre a VesteRetro" />} />
-                <Route path="/contato" element={<StaticPagePlaceholder title="Contato" />} />
-                <Route path="/faq" element={<StaticPagePlaceholder title="Perguntas Frequentes" />} />
-                <Route path="/guia-de-tamanhos" element={<StaticPagePlaceholder title="Guia de Tamanhos" />} />
-                <Route path="/privacidade" element={<StaticPagePlaceholder title="Política de Privacidade" />} />
-                <Route path="/termos" element={<StaticPagePlaceholder title="Termos de Uso" />} />
-                <Route path="/trocas-devolucoes" element={<StaticPagePlaceholder title="Política de Trocas e Devoluções" />} />
-                <Route path="/politica-de-envio" element={<StaticPagePlaceholder title="Política de Envio" />} />
-                <Route path="/cookies" element={<StaticPagePlaceholder title="Política de Cookies" />} />
+                <Route path="/sobre" element={<SobrePage />} />
+                <Route path="/contato" element={<ContatoPage />} />
+                <Route path="/faq" element={<FAQPage />} />
+                <Route path="/guia-de-tamanhos" element={<GuiaTamanhosPage />} />
+                <Route path="/privacidade" element={<PolicyPlaceholder title="Política de Privacidade" />} />
+                <Route path="/termos" element={<PolicyPlaceholder title="Termos de Uso" />} />
+                <Route path="/trocas-devolucoes" element={<PolicyPlaceholder title="Política de Trocas e Devoluções" />} />
+                <Route path="/politica-de-envio" element={<PolicyPlaceholder title="Política de Envio" />} />
+                <Route path="/cookies" element={<PolicyPlaceholder title="Política de Cookies" />} />
               </Route>
 
               {/* Auth */}

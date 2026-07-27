@@ -59,7 +59,7 @@ export function Header() {
         <div className="container-vr grid h-10 grid-cols-4 items-center text-[11px] font-semibold uppercase tracking-[0.16em] text-background">
           <span className="flex items-center justify-center gap-2">
             <Trophy className="h-3.5 w-3.5" />
-            Camisas retrô originais
+            Camisas retrô premium
           </span>
           <span className="flex items-center justify-center gap-2 border-l border-background/20">
             <ShieldCheck className="h-3.5 w-3.5" />
