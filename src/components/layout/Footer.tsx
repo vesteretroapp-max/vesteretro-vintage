@@ -20,7 +20,7 @@ export function Footer() {
             <img
               src={LOGO_URL}
               alt="VesteRetro — Vista a História"
-              className="h-16 w-auto"
+              className="h-16 w-auto mix-blend-lighten"
               loading="lazy"
             />
           </Link>
