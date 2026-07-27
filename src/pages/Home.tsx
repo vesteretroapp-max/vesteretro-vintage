@@ -31,8 +31,9 @@ export default function Home() {
       {/* ============ HERO SECTION ============ */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--gold)_10%,transparent),transparent_60%)]" />
-        <div className="container-vr grid gap-10 py-16 md:grid-cols-2 md:py-28 md:gap-16 items-center">
-          <div>
+        {/* Text content */}
+        <div className="container-vr py-16 md:py-24">
+          <div className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
               Coleção Retrô Premium
             </p>
@@ -79,19 +80,15 @@ export default function Home() {
               </li>
             </ul>
           </div>
-
-          {/* Right decorative — Hero image */}
-          <div className="relative">
-            <div className="absolute -inset-6 -z-10 rounded-full bg-[var(--gold)]/10 blur-3xl" />
-            <div className="w-full overflow-hidden rounded-2xl border border-[var(--border-gold)] shadow-lg">
-              <img
-                src="https://harmless-tapir-303.convex.cloud/api/storage/168d5986-3b6f-42f8-8ba8-732fe51aad9d"
-                alt="Camisas retrô dos grandes clubes do Brasil — Corinthians, Flamengo, Palmeiras e Vasco"
-                className="w-full h-auto object-cover"
-                loading="eager"
-              />
-            </div>
-          </div>
+        </div>
+        {/* Hero banner image — full width */}
+        <div className="w-full">
+          <img
+            src="https://harmless-tapir-303.convex.cloud/api/storage/168d5986-3b6f-42f8-8ba8-732fe51aad9d"
+            alt="Camisas retrô dos grandes clubes do Brasil — Corinthians, Flamengo, Palmeiras e Vasco"
+            className="w-full h-auto object-cover max-h-[500px]"
+            loading="eager"
+          />
         </div>
       </section>
 
