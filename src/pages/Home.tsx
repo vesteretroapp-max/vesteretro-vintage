@@ -84,7 +84,7 @@ export default function Home() {
         {/* Hero banner image — full width */}
         <div className="w-full">
           <img
-            src="https://harmless-tapir-303.convex.cloud/api/storage/168d5986-3b6f-42f8-8ba8-732fe51aad9d"
+            src="https://i.postimg.cc/2SnM0q7H/grandes.png"
             alt="Camisas retrô dos grandes clubes do Brasil — Corinthians, Flamengo, Palmeiras e Vasco"
             className="w-full h-auto object-cover max-h-[320px]"
             loading="eager"
