@@ -56,8 +56,18 @@ export default function Enderecos() {
   const [form, setForm] = useState(emptyForm);
 
   useEffect(() => {
-    if (user) loadAddresses();
-    else setLoading(false);
+    // Safety timeout: stop loading after 8 seconds even if user/supabase never loads
+    const timeout = setTimeout(() => setLoading(false), 8000);
+
+    if (user) {
+      clearTimeout(timeout);
+      loadAddresses();
+    } else {
+      setLoading(false);
+      clearTimeout(timeout);
+    }
+
+    return () => clearTimeout(timeout);
   }, [user]);
 
   const loadAddresses = async () => {

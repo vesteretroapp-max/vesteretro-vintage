@@ -192,12 +192,11 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/selecoes/:team" element={<Catalog />} />
                 <Route path="/categoria/:slug" element={<Catalog />} />
                 <Route path="/produto/:slug" element={<ProductDetail />} />
-                {/* New Supabase auth routes */}
-              <Route path="/entrar" element={<Login />} />
-              <Route path="/criar-conta" element={<CriarConta />} />
-              <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-              <Route path="/redefinir-senha" element={<RedefinirSenha />} />
-              <Route path="/carrinho" element={<Carrinho />} />
+                <Route path="/entrar" element={<Login />} />
+                <Route path="/criar-conta" element={<CriarConta />} />
+                <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+                <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+                <Route path="/carrinho" element={<Carrinho />} />
                 <Route path="/favoritos" element={<Favorites />} />
                 <Route path="/rastreamento" element={<Tracking />} />
                 

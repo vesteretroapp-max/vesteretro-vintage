@@ -110,7 +110,7 @@ export default function OrderConfirmation() {
                   <img src={item.image_url} alt="" className="w-8 h-10 object-cover rounded-sm" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-foreground truncate">{item.product_name || item.name}</p>
+                  <p className="text-xs text-foreground truncate">{item.name || item.product_name}</p>
                   <p className="text-[10px] text-muted-foreground">Tam: {item.size} · Qtd: {item.quantity || 1}</p>
                 </div>
               </div>
