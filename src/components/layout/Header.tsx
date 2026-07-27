@@ -16,7 +16,7 @@ import {
 import { useSupabaseAuth } from "@/hooks/use-supabase-auth";
 
 const LOGO_URL =
-  "https://harmless-tapir-303.convex.cloud/api/storage/026f76e2-7e38-46d7-8178-c7d0a140b884";
+  "https://i.postimg.cc/xT1LsBG6/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
 
 interface MegaMenuItem {
   name: string;
