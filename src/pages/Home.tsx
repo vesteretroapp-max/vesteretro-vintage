@@ -12,6 +12,13 @@ import {
 import { ProductCard } from "@/components/ProductCard";
 import { demoProducts, decades } from "@/data/products";
 
+// Working Unsplash image URLs for editorial section
+const EDITORIAL_IMAGES = [
+  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80",
+  "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&q=80",
+  "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80",
+];
+
 export default function Home() {
   return (
     <div>
@@ -197,7 +204,7 @@ export default function Home() {
                 to={`/busca?decada=${d.value}`}
                 className="group relative overflow-hidden rounded-lg border border-border bg-background p-8 text-center transition hover:border-[var(--gold)]"
               >
-                <p className="font-display text-3xl">{d.label.replace("Anos ", "")}</p>
+                <p className="font-display text-3xl">{d.label.replace("s", "")}</p>
                 <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-[var(--gold)] transition-colors">
                   Explorar década
                 </p>
@@ -227,6 +234,7 @@ export default function Home() {
               title: "Brasil 1970",
               text: "O tricampeonato, a magia de Pelé e um time que redefiniu o jogo bonito.",
               slug: "/produto/camisa-retro-brasil-1970-home",
+              img: 0,
             },
             {
               year: "1981",
@@ -234,6 +242,7 @@ export default function Home() {
               title: "Flamengo 1981",
               text: "Zico, Júnior, Nunes. O manto rubro-negro que conquistou o mundo em Tóquio.",
               slug: "/produto/camisa-retro-flamengo-1981-home",
+              img: 1,
             },
             {
               year: "1999",
@@ -241,24 +250,39 @@ export default function Home() {
               title: "Manchester United 1999",
               text: "A remontada em Barcelona, os minutos finais que viraram lenda em Old Trafford.",
               slug: "/produto/camisa-retro-manchester-united-1999-home",
+              img: 2,
             },
           ].map((article) => (
             <Link
               key={article.title}
               to={article.slug}
-              className="card-premium rounded-lg p-6 transition-all"
+              className="card-premium group relative rounded-lg overflow-hidden transition-all"
             >
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--gold)]">
-                {article.year} · {article.competition}
-              </p>
-              <h3 className="mt-3 font-display text-2xl">{article.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {article.text}
-              </p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--gold)]">
-                Ler história
-                <ArrowRight className="h-4 w-4" />
-              </span>
+              {/* Background image */}
+              <div className="absolute inset-0">
+                <img
+                  src={EDITORIAL_IMAGES[article.img]}
+                  alt=""
+                  className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-surface/60" />
+              </div>
+
+              {/* Content */}
+              <div className="relative p-6 lg:p-8">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--gold)]">
+                  {article.year} · {article.competition}
+                </p>
+                <h3 className="mt-3 font-display text-2xl">{article.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {article.text}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--gold)] group-hover:gap-3 transition-all">
+                  Ler história
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
             </Link>
           ))}
         </div>
@@ -361,8 +385,15 @@ export default function Home() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="aspect-square rounded-md border border-border bg-surface-2 transition hover:border-[var(--gold)]"
-            />
+              className="aspect-square rounded-md border border-border bg-surface-2 transition hover:border-[var(--gold)] overflow-hidden"
+            >
+              <img
+                src={`https://picsum.photos/id/${i * 100}/400/400`}
+                alt=""
+                className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity"
+                loading="lazy"
+              />
+            </a>
           ))}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">

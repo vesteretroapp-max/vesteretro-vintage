@@ -9,6 +9,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const discount = product.promotionalPrice
     ? Math.round(
@@ -56,6 +57,11 @@ export function ProductCard({ product }: ProductCardProps) {
           -{discount}%
         </span>
       )}
+      {product.isNew && !product.isBestSeller && (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-[var(--gold)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-background">
+          Novo
+        </span>
+      )}
 
       {/* Favorite button */}
       <button
@@ -77,29 +83,39 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Image */}
       <Link to={`/produto/${product.slug}`}>
         <div className="relative aspect-[4/5] overflow-hidden bg-surface-2">
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-2 via-surface to-background p-6">
-            <svg
-              viewBox="0 0 120 130"
-              className="h-40 w-40 text-[var(--gold)]/70 transition group-hover:scale-105"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path
-                d="M20 20 L45 10 Q60 25 75 10 L100 20 L110 45 L90 55 L90 120 L30 120 L30 55 L10 45 Z"
-                fill="currentColor"
-                fillOpacity="0.08"
-              />
-            </svg>
-            <div className="text-center">
-              <p className="font-display text-lg text-foreground/90">
-                {product.club}
-              </p>
-              <p className="text-xs uppercase tracking-[0.2em] text-[var(--gold)]">
-                {product.year}
-              </p>
+          {!imgError ? (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-2 via-surface to-background p-6">
+              <svg
+                viewBox="0 0 120 130"
+                className="h-32 w-32 text-[var(--gold)]/50"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path
+                  d="M20 20 L45 10 Q60 25 75 10 L100 20 L110 45 L90 55 L90 120 L30 120 L30 55 L10 45 Z"
+                  fill="currentColor"
+                  fillOpacity="0.08"
+                />
+              </svg>
+              <div className="text-center">
+                <p className="font-display text-lg text-foreground/70">
+                  {product.club}
+                </p>
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--gold)]/70">
+                  {product.year}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Link>
 

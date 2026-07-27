@@ -25,48 +25,30 @@ export interface Product {
   decade: number;
 }
 
-const placeholderImages = {
-  brasil70:
-    "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80",
-  brasil94:
-    "https://images.unsplash.com/photo-1580086317819-3c8d0ae046a3?w=600&q=80",
-  brasil02:
-    "https://images.unsplash.com/photo-1591064993897-7a2881dfe61a?w=600&q=80",
-  fla81:
-    "https://images.unsplash.com/photo-1567008639820-9c1d7bbbb322?w=600&q=80",
-  santos62:
-    "https://images.unsplash.com/photo-1591064993888-34c7013ef79b?w=600&q=80",
-  vasco97:
-    "https://images.unsplash.com/photo-1614633833024-5c7c98f1eebd?w=600&q=80",
-  sao99:
-    "https://images.unsplash.com/photo-1580086318044-01e2928f8c4d?w=600&q=80",
-  gremio83:
-    "https://images.unsplash.com/photo-1580086318949-6be56e82365d?w=600&q=80",
-  atletico83:
-    "https://images.unsplash.com/photo-1591064993966-81d58b650cbe?w=600&q=80",
-  corinthians:
-    "https://images.unsplash.com/photo-1614633833024-5c7c98f1eebd?w=600&q=80",
-  liverpool84:
-    "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&q=80",
-  manutd99:
-    "https://images.unsplash.com/photo-1555507036-ab1f40380268?w=600&q=80",
-  barca99:
-    "https://images.unsplash.com/photo-1567008639820-9c1d7bbbb322?w=600&q=80",
-  real02:
-    "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80",
-  milan89:
-    "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&q=80",
-  inter98:
-    "https://images.unsplash.com/photo-1555507036-ab1f40380268?w=600&q=80",
-  arsenal04:
-    "https://images.unsplash.com/photo-1567008639820-9c1d7bbbb322?w=600&q=80",
-  juve96:
-    "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80",
-  boca96:
-    "https://images.unsplash.com/photo-1591064993897-7a2881dfe61a?w=600&q=80",
-  argentina86:
-    "https://images.unsplash.com/photo-1580086317819-3c8d0ae046a3?w=600&q=80",
-};
+// Working Unsplash image URLs
+const U1 = "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80";
+const U2 = "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&q=80";
+const U3 = "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&q=80";
+const U4 = "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=600&q=80";
+const U5 = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80";
+const U6 = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80";
+
+// Picsum photos (guaranteed to work)
+const P1 = "https://picsum.photos/id/1/600/800";
+const P2 = "https://picsum.photos/id/10/600/800";
+const P3 = "https://picsum.photos/id/100/600/800";
+const P4 = "https://picsum.photos/id/200/600/800";
+const P5 = "https://picsum.photos/id/300/600/800";
+const P6 = "https://picsum.photos/id/400/600/800";
+const P7 = "https://picsum.photos/id/500/600/800";
+const P8 = "https://picsum.photos/id/600/600/800";
+const P9 = "https://picsum.photos/id/700/600/800";
+const P10 = "https://picsum.photos/id/800/600/800";
+const P11 = "https://picsum.photos/id/20/600/800";
+const P12 = "https://picsum.photos/id/30/600/800";
+const P13 = "https://picsum.photos/id/40/600/800";
+const P14 = "https://picsum.photos/id/50/600/800";
+const P15 = "https://picsum.photos/id/60/600/800";
 
 const generateSizes = () => [
   { size: "P", sku: "P", stock: Math.floor(Math.random() * 20) + 5 },
@@ -92,11 +74,7 @@ export const demoProducts: Product[] = [
       "Em 1970, a Seleção Brasileira conquistou o tricampeonato mundial no México com um futebol que encantou o mundo. Liderada por Pelé, a equipe de Zagallo é considerada por muitos a melhor de todos os tempos.",
     price: 179.9,
     promotionalPrice: 149.9,
-    images: [
-      placeholderImages.brasil70,
-      placeholderImages.brasil94,
-      placeholderImages.brasil02,
-    ],
+    images: [U1, U4, P1],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -118,13 +96,9 @@ export const demoProducts: Product[] = [
     category: "selecoes",
     country: "Brasil",
     description:
-      "A camisa do tetra-campeonato mundial. O Brasil conquistou o mundo nos Estados Unidos com esta camisa que marcou gerações. Amarelo canário com detalhes verdes e azuis, gola redonda e design clássico dos anos 90.",
+      "A camisa do tetra-campeonato mundial. O Brasil conquistou o mundo nos Estados Unidos com esta camisa que marcou gerações.",
     price: 169.9,
-    images: [
-      placeholderImages.brasil94,
-      placeholderImages.brasil02,
-      placeholderImages.brasil70,
-    ],
+    images: [U4, U1, P2],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -146,14 +120,10 @@ export const demoProducts: Product[] = [
     category: "selecoes",
     country: "Brasil",
     description:
-      "A camisa do penta. O Brasil voltou a ser campeão mundial no Japão e Coreia com esta camisa icônica. Amarelo vibrante com detalhes verdes e azuis, gola estilizada e o escudo do pentacampeonato.",
+      "A camisa do penta. O Brasil voltou a ser campeão mundial no Japão e Coreia com esta camisa icônica.",
     price: 179.9,
     promotionalPrice: 159.9,
-    images: [
-      placeholderImages.brasil02,
-      placeholderImages.brasil94,
-      placeholderImages.brasil70,
-    ],
+    images: [U6, U1, P3],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -175,16 +145,12 @@ export const demoProducts: Product[] = [
     category: "brasil",
     country: "Brasil",
     description:
-      "A camisa do Flamengo campeão mundial e da Libertadores de 1981. Listras rubro-negras que marcaram a era de ouro do Mengão. Gola clássica e tecido que eterniza a memória da maior equipe da história do clube.",
+      "A camisa do Flamengo campeão mundial e da Libertadores de 1981. Listras rubro-negras que marcaram a era de ouro do Mengão.",
     history:
       "Em 1981, o Flamengo de Zico conquistou a América e o Mundo. A equipe rubro-negra encantou com futebol ofensivo e envolvente, derrotando o Liverpool na final do Mundial no Japão.",
     price: 169.9,
     promotionalPrice: 149.9,
-    images: [
-      placeholderImages.fla81,
-      placeholderImages.vasco97,
-      placeholderImages.santos62,
-    ],
+    images: [U2, U3, P4],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -206,13 +172,9 @@ export const demoProducts: Product[] = [
     category: "brasil",
     country: "Brasil",
     description:
-      "A camisa do Santos bicampeão mundial. As listras pretas e brancas que Pelé eternizou nos gramados do mundo. Modelo clássico com gola polo e detalhes em dourado.",
+      "A camisa do Santos bicampeão mundial. As listras pretas e brancas que Pelé eternizou nos gramados do mundo.",
     price: 179.9,
-    images: [
-      placeholderImages.santos62,
-      placeholderImages.fla81,
-      placeholderImages.vasco97,
-    ],
+    images: [P5, U2, P11],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -233,13 +195,9 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "brasil",
     country: "Brasil",
-    description: "A camisa do Expresso da Vitória. Faixa diagonal que é símbolo de tradição e luta. Modelo clássico que representa a paixão vascaína.",
+    description: "A camisa do Expresso da Vitória. Faixa diagonal que é símbolo de tradição e luta.",
     price: 159.9,
-    images: [
-      placeholderImages.vasco97,
-      placeholderImages.santos62,
-      placeholderImages.fla81,
-    ],
+    images: [P6, P12, U3],
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,
@@ -258,13 +216,9 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "brasil",
     country: "Brasil",
-    description: "A camisa tricolor que representa a tradição do Morumbi. Listras vermelhas, pretas e brancas com detalhes em dourado.",
+    description: "A camisa tricolor que representa a tradição do Morumbi.",
     price: 159.9,
-    images: [
-      placeholderImages.sao99,
-      placeholderImages.atletico83,
-      placeholderImages.gremio83,
-    ],
+    images: [P7, P13, U4],
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,
@@ -283,14 +237,10 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "mundo",
     country: "Inglaterra",
-    description: "O vermelho dos Reds que dominou a Europa nos anos 80. Camisa clássica com o emblema do Liverpool e patrocínio Crown Paints.",
-    history: "O Liverpool de 1984 conquistou a Europa sob o comando de Joe Fagan. A equipe vermelha derrotou a Roma na final da Taça dos Campeões Europeus, em pleno Estádio Olímpico de Roma.",
+    description: "O vermelho dos Reds que dominou a Europa nos anos 80.",
+    history: "O Liverpool de 1984 conquistou a Europa sob o comando de Joe Fagan. A equipe vermelha derrotou a Roma na final da Taça dos Campeões Europeus.",
     price: 169.9,
-    images: [
-      placeholderImages.liverpool84,
-      placeholderImages.manutd99,
-      placeholderImages.barca99,
-    ],
+    images: [U3, U2, P8],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -311,14 +261,10 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "mundo",
     country: "Inglaterra",
-    description: "O vermelho da tríplice coroa. O Manchester United de 1999 conquistou tudo com esta camisa inesquecível.",
+    description: "O vermelho da tríplice coroa. O Manchester United de 1999 conquistou tudo.",
     price: 179.9,
     promotionalPrice: 159.9,
-    images: [
-      placeholderImages.manutd99,
-      placeholderImages.liverpool84,
-      placeholderImages.barca99,
-    ],
+    images: [U5, U6, P9],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -339,13 +285,9 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "mundo",
     country: "Espanha",
-    description: "O azul e grená do Barça na virada do milênio. Camisa que representa a tradição catalã e o estilo de jogo que encantou o mundo.",
+    description: "O azul e grená do Barça na virada do milênio.",
     price: 169.9,
-    images: [
-      placeholderImages.barca99,
-      placeholderImages.real02,
-      placeholderImages.manutd99,
-    ],
+    images: [P10, P14, U5],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: false,
@@ -364,14 +306,10 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "mundo",
     country: "Espanha",
-    description: "O branco imaculado do Real Madrid campeão europeu. A camisa que Zidane eternizou com seu gol na final de Glasgow.",
-    history: "Na final de 2002, Zidane marcou um dos gols mais bonitos da história da Champions League. Um voleio espetacular que deu ao Real Madrid o nono título europeu.",
+    description: "O branco imaculado do Real Madrid campeão europeu.",
+    history: "Na final de 2002, Zidane marcou um dos gols mais bonitos da história da Champions League.",
     price: 179.9,
-    images: [
-      placeholderImages.real02,
-      placeholderImages.barca99,
-      placeholderImages.milan89,
-    ],
+    images: [P11, U6, P15],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -392,14 +330,10 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "mundo",
     country: "Itália",
-    description: "O vermelho e preto do Milan imortal de Sacchi. Uma das maiores equipes de todos os tempos.",
-    history: "O Milan de Arrigo Sacchi revolucionou o futebol com sua linha defensiva alta e marcação sob pressão. Conquistou a Champions League em 1989 com um futebol avassalador.",
+    description: "O vermelho e preto do Milan imortal de Sacchi.",
+    history: "O Milan de Arrigo Sacchi revolucionou o futebol com sua linha defensiva alta e marcação sob pressão.",
     price: 169.9,
-    images: [
-      placeholderImages.milan89,
-      placeholderImages.inter98,
-      placeholderImages.juve96,
-    ],
+    images: [P12, U3, P4],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: false,
@@ -420,14 +354,10 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "selecoes",
     country: "Argentina",
-    description: "A camisa celeste e branca da Argentina bicampeã mundial. Eternizada por Maradona no México.",
-    history: "A Copa de 1986 foi de Diego Maradona. O gênio argentino marcou dois dos gols mais famosos da história: 'A Mão de Deus' e 'O Gol do Século' contra a Inglaterra.",
+    description: "A camisa celeste e branca da Argentina bicampeã mundial.",
+    history: "A Copa de 1986 foi de Diego Maradona. O gênio argentino marcou dois dos gols mais famosos da história.",
     price: 179.9,
-    images: [
-      placeholderImages.argentina86,
-      placeholderImages.brasil70,
-      placeholderImages.brasil02,
-    ],
+    images: [P13, U4, P1],
     sizes: generateSizes(),
     isNew: false,
     isBestSeller: true,
@@ -448,13 +378,9 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "brasil",
     country: "Brasil",
-    description: "A camisa do Grêmio campeão do mundo. Tricolor gaúcho que conquistou a América e o Mundo.",
+    description: "A camisa do Grêmio campeão do mundo.",
     price: 159.9,
-    images: [
-      placeholderImages.gremio83,
-      placeholderImages.sao99,
-      placeholderImages.atletico83,
-    ],
+    images: [P14, U2, P5],
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,
@@ -473,13 +399,9 @@ export const demoProducts: Product[] = [
     type: "home",
     category: "brasil",
     country: "Brasil",
-    description: "A camisa do Galo campeão brasileiro. Listras pretas e brancas que representam a força atleticana.",
+    description: "A camisa do Galo campeão brasileiro.",
     price: 149.9,
-    images: [
-      placeholderImages.atletico83,
-      placeholderImages.gremio83,
-      placeholderImages.sao99,
-    ],
+    images: [P15, P7, U1],
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,
@@ -501,10 +423,9 @@ export const categories = [
 ];
 
 export const decades = [
-  { label: "Anos 1960", value: 1960 },
-  { label: "Anos 1970", value: 1970 },
-  { label: "Anos 1980", value: 1980 },
-  { label: "Anos 1990", value: 1990 },
-  { label: "Anos 2000", value: 2000 },
-  { label: "Anos 2010", value: 2010 },
+  { label: "1970s", value: 1970 },
+  { label: "1980s", value: 1980 },
+  { label: "1990s", value: 1990 },
+  { label: "2000s", value: 2000 },
+  { label: "2010s", value: 2010 },
 ];
