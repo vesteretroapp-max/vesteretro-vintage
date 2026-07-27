@@ -16,7 +16,7 @@ import {
 import { useSupabaseAuth } from "@/hooks/use-supabase-auth";
 
 const LOGO_URL =
-  "https://i.postimg.cc/xT1LsBG6/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
+  "https://i.postimg.cc/1PpMzQ81/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
 
 interface MegaMenuItem {
   name: string;
@@ -87,7 +87,7 @@ export function Header() {
           <img
             src={LOGO_URL}
             alt="VesteRetro — Vista a História"
-            className="h-14 w-auto md:h-16 mix-blend-lighten"
+            className="h-16 w-auto md:h-20 mix-blend-lighten"
             loading="eager"
           />
         </Link>

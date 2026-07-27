@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const LOGO_URL =
-  "https://i.postimg.cc/xT1LsBG6/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
+  "https://i.postimg.cc/1PpMzQ81/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
 
 export function Footer() {
   return (
@@ -20,7 +20,7 @@ export function Footer() {
             <img
               src={LOGO_URL}
               alt="VesteRetro — Vista a História"
-              className="h-20 w-auto mix-blend-lighten"
+              className="h-24 w-auto mix-blend-lighten"
               loading="lazy"
             />
           </Link>
