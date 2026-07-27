@@ -87,7 +87,7 @@ export function Header() {
           <img
             src={LOGO_URL}
             alt="VesteRetro — Vista a História"
-            className="h-14 w-auto md:h-20 mix-blend-lighten"
+            className="h-9 w-auto md:h-11 mix-blend-lighten"
             loading="eager"
           />
         </Link>
