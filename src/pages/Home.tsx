@@ -31,7 +31,7 @@ export default function Home() {
       {/* ============ HERO SECTION ============ */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--gold)_10%,transparent),transparent_60%)]" />
-        <div className="container-vr grid gap-10 py-16 md:grid-cols-2 md:py-24 md:gap-12 items-center">
+        <div className="container-vr grid gap-10 py-16 md:grid-cols-[1fr_1.3fr] md:py-24 md:gap-12 items-center">
           {/* Left: Text */}
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
