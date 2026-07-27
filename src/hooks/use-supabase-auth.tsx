@@ -134,7 +134,7 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -147,9 +147,12 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         return { error: message };
       }
 
-      // Sync cart and favorites after login
-      await syncCartAfterLogin();
-      await syncFavoritesAfterLogin();
+      // Sync cart and favorites after login using session user (not state variable)
+      const currentUser = data.session?.user ?? null;
+      if (currentUser) {
+        await syncCartAfterLogin(currentUser);
+        await syncFavoritesAfterLogin(currentUser);
+      }
 
       return { error: null };
     } catch {
@@ -214,9 +217,10 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     }
   };
 
-  const syncCartAfterLogin = async () => {
+  const syncCartAfterLogin = async (syncUser?: User) => {
+    const currentUser = syncUser || user;
     const stored = localStorage.getItem("veste_cart");
-    if (!stored || !user) return;
+    if (!stored || !currentUser) return;
 
     try {
       const localItems = JSON.parse(stored);
@@ -225,13 +229,13 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       let { data: cart } = await supabase
         .from("carts")
         .select("id")
-        .eq("user_id", user.id)
+        .eq("user_id", currentUser.id)
         .single();
 
       if (!cart) {
         const { data: newCart } = await supabase
           .from("carts")
-          .insert({ user_id: user.id })
+          .insert({ user_id: currentUser.id })
           .select("id")
           .single();
         cart = newCart;
@@ -271,9 +275,10 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     }
   };
 
-  const syncFavoritesAfterLogin = async () => {
+  const syncFavoritesAfterLogin = async (syncUser?: User) => {
+    const currentUser = syncUser || user;
     const stored = localStorage.getItem("veste_favorites");
-    if (!stored || !user) return;
+    if (!stored || !currentUser) return;
 
     try {
       const localFavorites = JSON.parse(stored);
@@ -282,13 +287,13 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         const { data: existing } = await supabase
           .from("favorites")
           .select("id")
-          .eq("user_id", user.id)
+          .eq("user_id", currentUser.id)
           .eq("product_id", fav.productId)
           .maybeSingle();
 
         if (!existing) {
           await supabase.from("favorites").insert({
-            user_id: user.id,
+            user_id: currentUser.id,
             product_id: fav.productId,
           });
         }

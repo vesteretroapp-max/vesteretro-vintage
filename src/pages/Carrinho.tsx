@@ -166,9 +166,11 @@ export default function Carrinho() {
     if (couponCode.trim().toUpperCase() === "VR10") {
       setCouponApplied(true);
       setCouponError("");
+      localStorage.setItem("veste_coupon", couponCode.trim().toUpperCase());
     } else {
       setCouponError("Cupom inválido ou expirado.");
       setCouponApplied(false);
+      localStorage.removeItem("veste_coupon");
     }
   };
 

@@ -153,7 +153,7 @@ export function Header() {
           </button>
           <Link
             aria-label="Conta"
-            to={isAuthenticated ? "/minha-conta" : "/auth"}
+            to={isAuthenticated ? "/minha-conta" : "/entrar"}
             className="rounded-md p-2 text-foreground/85 hover:text-[var(--gold)] transition-colors"
           >
             <User className="h-5 w-5" />
@@ -228,7 +228,7 @@ export function Header() {
             </Link>
             <div className="border-t border-border pt-2 mt-2">
               <Link
-                to={isAuthenticated ? "/minha-conta" : "/auth"}
+                to={isAuthenticated ? "/minha-conta" : "/entrar"}
                 className="flex items-center gap-2 px-3 py-2.5 text-sm text-foreground/85 hover:text-[var(--gold)] hover:bg-surface-2 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
