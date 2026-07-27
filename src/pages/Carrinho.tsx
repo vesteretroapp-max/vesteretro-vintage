@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
+import { useSupabaseAuth } from "@/hooks/use-supabase-auth";
+import { supabase } from "@/lib/supabase";
 import {
   ShoppingBag,
   Trash2,
@@ -35,12 +37,48 @@ export default function Carrinho() {
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState("");
   const navigate = useNavigate();
+  const { user } = useSupabaseAuth();
 
   useEffect(() => {
     loadCart();
   }, []);
 
-  const loadCart = () => {
+  const loadCart = async () => {
+    if (user) {
+      // Try loading from Supabase
+      try {
+        const { data: cart } = await supabase
+          .from("carts")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (cart) {
+          const { data: items } = await supabase
+            .from("cart_items")
+            .select("*")
+            .eq("cart_id", cart.id);
+
+          if (items && items.length > 0) {
+            const mapped = items.map((item: any) => ({
+              id: item.product_id,
+              productId: item.product_id,
+              name: item.product_name || "",
+              price: item.unit_price,
+              image: item.image_url || "",
+              size: item.size,
+              quantity: item.quantity,
+              slug: item.slug || "",
+            }));
+            setCartItems(mapped);
+            return;
+          }
+        }
+      } catch {
+        // fallback to localStorage
+      }
+    }
+
     const stored = localStorage.getItem("veste_cart");
     if (stored) {
       try {
@@ -51,10 +89,52 @@ export default function Carrinho() {
     }
   };
 
-  const updateCart = (items: CartItem[]) => {
+  const updateCart = async (items: CartItem[]) => {
     setCartItems(items);
     localStorage.setItem("veste_cart", JSON.stringify(items));
     window.dispatchEvent(new Event("cart-updated"));
+
+    // Sync to Supabase if logged in
+    if (user) {
+      try {
+        let { data: cart } = await supabase
+          .from("carts")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (!cart) {
+          const { data: newCart } = await supabase
+            .from("carts")
+            .insert({ user_id: user.id })
+            .select("id")
+            .single();
+          cart = newCart;
+        }
+
+        if (cart) {
+          // Delete old items
+          await supabase.from("cart_items").delete().eq("cart_id", cart.id);
+
+          // Insert new items
+          if (items.length > 0) {
+            const cartItemsData = items.map((item) => ({
+              cart_id: cart.id,
+              product_id: item.productId,
+              product_name: item.name,
+              image_url: item.image,
+              size: item.size,
+              quantity: item.quantity,
+              unit_price: item.price,
+              slug: item.slug,
+            }));
+            await supabase.from("cart_items").insert(cartItemsData);
+          }
+        }
+      } catch (err) {
+        console.error("Error syncing cart to DB:", err);
+      }
+    }
   };
 
   const updateQuantity = (productId: string, size: string, delta: number) => {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Heart, ShoppingBag, Trash2 } from "lucide-react";
+import { useSupabaseAuth } from "@/hooks/use-supabase-auth";
+import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import { demoProducts } from "@/data/products";
 
@@ -11,8 +13,29 @@ interface FavoriteItem {
 
 export default function Favorites() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const { user } = useSupabaseAuth();
 
   useEffect(() => {
+    loadFavorites();
+  }, [user]);
+
+  const loadFavorites = async () => {
+    if (user) {
+      try {
+        const { data } = await supabase
+          .from("favorites")
+          .select("product_id")
+          .eq("user_id", user.id);
+
+        if (data && data.length > 0) {
+          setFavoriteIds(data.map((f: any) => f.product_id));
+          return;
+        }
+      } catch {
+        // fallback
+      }
+    }
+
     const stored = localStorage.getItem("veste_favorites");
     if (stored) {
       try {
@@ -22,14 +45,22 @@ export default function Favorites() {
         setFavoriteIds([]);
       }
     }
-  }, []);
+  };
 
   const products = demoProducts.filter((p) => favoriteIds.includes(p.id));
 
-  const clearFavorites = () => {
+  const clearFavorites = async () => {
     localStorage.removeItem("veste_favorites");
     setFavoriteIds([]);
     window.dispatchEvent(new Event("favorites-updated"));
+
+    if (user) {
+      try {
+        await supabase.from("favorites").delete().eq("user_id", user.id);
+      } catch (err) {
+        console.error("Error clearing favorites from DB:", err);
+      }
+    }
   };
 
   return (

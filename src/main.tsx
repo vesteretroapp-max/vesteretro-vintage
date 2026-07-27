@@ -4,6 +4,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { VlyToolbar } from "../vly-toolbar-readonly.tsx";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { ConvexReactClient } from "convex/react";
+import { SupabaseAuthProvider } from "@/hooks/use-supabase-auth";
 import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
@@ -20,6 +21,11 @@ const Carrinho = lazy(() => import("./pages/Carrinho.tsx"));
 const Checkout = lazy(() => import("./pages/Checkout.tsx"));
 const OrderConfirmation = lazy(() => import("./pages/OrderConfirmation.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
+const Login = lazy(() => import("./pages/Login.tsx"));
+const CriarConta = lazy(() => import("./pages/CriarConta.tsx"));
+const RecuperarSenha = lazy(() => import("./pages/RecuperarSenha.tsx"));
+const RedefinirSenha = lazy(() => import("./pages/RedefinirSenha.tsx"));
+const MinhaContaEnderecos = lazy(() => import("./pages/Enderecos.tsx"));
 const MinhaConta = lazy(() => import("./pages/MinhaConta.tsx"));
 const MeusPedidos = lazy(() => import("./pages/MeusPedidos.tsx"));
 const Favorites = lazy(() => import("./pages/Favorites.tsx"));
@@ -164,6 +170,7 @@ createRoot(document.getElementById("root")!).render(
       <ToolbarErrorBoundary>
         <VlyToolbar />
       </ToolbarErrorBoundary>
+      <SupabaseAuthProvider>
       <ConvexAuthProvider client={convex}>
         <BrowserRouter>
           <RouteSyncer />
@@ -185,7 +192,12 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/selecoes/:team" element={<Catalog />} />
                 <Route path="/categoria/:slug" element={<Catalog />} />
                 <Route path="/produto/:slug" element={<ProductDetail />} />
-                <Route path="/carrinho" element={<Carrinho />} />
+                {/* New Supabase auth routes */}
+              <Route path="/entrar" element={<Login />} />
+              <Route path="/criar-conta" element={<CriarConta />} />
+              <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+              <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+              <Route path="/carrinho" element={<Carrinho />} />
                 <Route path="/favoritos" element={<Favorites />} />
                 <Route path="/rastreamento" element={<Tracking />} />
                 
@@ -240,7 +252,7 @@ createRoot(document.getElementById("root")!).render(
                 path="/minha-conta/enderecos"
                 element={
                   <RequireAuth>
-                    <MinhaConta />
+                    <MinhaContaEnderecos />
                   </RequireAuth>
                 }
               />
@@ -283,8 +295,8 @@ createRoot(document.getElementById("root")!).render(
             </Routes>
           </Suspense>
         </BrowserRouter>
-        <Toaster />
-      </ConvexAuthProvider>
+        <Toaster />        </ConvexAuthProvider>
+      </SupabaseAuthProvider>
     </RootErrorBoundary>
   </StrictMode>,
 );

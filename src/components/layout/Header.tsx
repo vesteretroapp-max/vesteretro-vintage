@@ -13,7 +13,7 @@ import {
   Lock,
   CreditCard,
 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { useSupabaseAuth } from "@/hooks/use-supabase-auth";
 
 const LOGO_URL =
   "https://harmless-tapir-303.convex.cloud/api/storage/026f76e2-7e38-46d7-8178-c7d0a140b884";
@@ -33,7 +33,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useSupabaseAuth();
 
   useEffect(() => {
     const updateCart = () => {
