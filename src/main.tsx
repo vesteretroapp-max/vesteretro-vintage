@@ -26,6 +26,7 @@ const Login = lazy(() => import("./pages/Login.tsx"));
 const CriarConta = lazy(() => import("./pages/CriarConta.tsx"));
 const RecuperarSenha = lazy(() => import("./pages/RecuperarSenha.tsx"));
 const RedefinirSenha = lazy(() => import("./pages/RedefinirSenha.tsx"));
+const ConfirmarEmail = lazy(() => import("./pages/ConfirmarEmail.tsx"));
 const MinhaContaEnderecos = lazy(() => import("./pages/Enderecos.tsx"));
 const MinhaConta = lazy(() => import("./pages/MinhaConta.tsx"));
 const MeusPedidos = lazy(() => import("./pages/MeusPedidos.tsx"));
@@ -213,6 +214,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/criar-conta" element={<CriarConta />} />
                 <Route path="/recuperar-senha" element={<RecuperarSenha />} />
                 <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+                <Route path="/confirmar-email" element={<ConfirmarEmail />} />
                 <Route path="/carrinho" element={<Carrinho />} />
                 <Route path="/favoritos" element={<Favorites />} />
                 <Route path="/rastreamento" element={<Tracking />} />
