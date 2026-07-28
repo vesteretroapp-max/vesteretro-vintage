@@ -152,16 +152,44 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
 
   const signIn = async (email: string, password: string) => {
     try {
+      // Normalize email: trim whitespace and convert to lowercase
+      const normalizedEmail = email.trim().toLowerCase();
+
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: normalizedEmail,
         password,
       });
 
       if (error) {
-        const message =
-          error.message === "Invalid login credentials"
-            ? "E-mail ou senha incorretos."
-            : "Não foi possível entrar. Tente novamente.";
+        // Log technical error details for debugging (never log passwords or tokens)
+        console.error("[Auth] signIn error:", error.message, error.status);
+
+        // Map Supabase error codes to friendly Portuguese messages
+        let message: string;
+        switch (error.message) {
+          case "Invalid login credentials":
+            message = "E-mail ou senha incorretos.";
+            break;
+          case "Email not confirmed":
+          case "email_not_confirmed":
+            message = "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada e spam.";
+            break;
+          case "Too many requests":
+          case "too_many_requests":
+            message = "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
+            break;
+          case "Invalid email or password":
+            message = "E-mail ou senha incorretos.";
+            break;
+          case "User not found":
+            message = "E-mail ou senha incorretos.";
+            break;
+          case "Email rate limit exceeded":
+            message = "Limite de tentativas atingido. Aguarde alguns minutos.";
+            break;
+          default:
+            message = "Não foi possível entrar. Verifique seus dados e tente novamente.";
+        }
         return { error: message };
       }
 
@@ -173,8 +201,9 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       }
 
       return { error: null };
-    } catch {
-      return { error: "Erro de conexão. Verifique sua internet e tente novamente." };
+    } catch (err) {
+      console.error("[Auth] signIn connection error:", err);
+      return { error: "Não foi possível acessar sua conta agora. Verifique sua internet e tente novamente." };
     }
   };
 
