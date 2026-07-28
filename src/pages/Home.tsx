@@ -185,7 +185,7 @@ export default function Home() {
             { name: "Clubes do Brasil", desc: "Do Maracanã ao Beira-Rio", href: "/clubes-do-brasil" },
             { name: "Clubes do Mundo", desc: "As lendas da Europa e América", href: "/clubes-do-mundo" },
             { name: "Seleções", desc: "Copas que fizeram história", href: "/selecoes" },
-            { name: "NBA Classics", desc: "Regatas históricas do basquete", href: "/categoria/nba" },
+            { name: "NBA", desc: "Regatas dos maiores times do basquete", href: "/categoria/nba" },
             { name: "Promoções", desc: "Ofertas selecionadas", href: "/promocoes" },
             { name: "Todas as camisas", desc: "Explore o catálogo completo", href: "/todos-os-produtos" },
           ].map((cat) => (
@@ -281,8 +281,8 @@ export default function Home() {
         <section className="container-vr py-16 md:py-20 border-t border-border">
           <SectionHeader
             eyebrow="Basquete"
-            title="NBA Classics"
-            subtitle="Regatas históricas das maiores franquias do basquete mundial."
+            title="NBA"
+            subtitle="Regatas dos maiores times e estrelas do basquete."
             href="/categoria/nba"
             linkText="Ver todos os modelos NBA"
           />
