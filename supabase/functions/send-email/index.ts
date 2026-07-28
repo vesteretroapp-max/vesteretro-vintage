@@ -60,7 +60,7 @@ serve(async (req: Request) => {
     }
 
     // Get sender config from environment
-    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "vesteretro.app@gmail.com";
+    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "contato@vesteretro.com.br";
     const fromName = Deno.env.get("RESEND_FROM_NAME") || "VesteRetro";
     const from = `${fromEmail}`;
 

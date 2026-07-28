@@ -6,9 +6,9 @@
  *
  * Environment Variables Required (in Supabase Edge Function):
  * - RESEND_API_KEY: Resend API authentication key
- * - RESEND_FROM_EMAIL: Sender email address (vesteretro.app@gmail.com)
+ * - RESEND_FROM_EMAIL: Sender email address (contato@vesteretro.com.br)
  * - RESEND_FROM_NAME: Sender display name (VesteRetro)
- * - ADMIN_EMAIL: Admin notification email (vesteretro.app@gmail.com)
+ * - ADMIN_EMAIL: Admin notification email (contato@vesteretro.com.br)
  *
  * NOTE: Auth emails (signup confirmation, password reset) are handled by Supabase Auth.
  * This service handles transactional emails (orders, notifications, etc.)
@@ -499,7 +499,7 @@ export class ResendEmailService {
     });
 
     // Send admin notification
-    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'vesteretro.app@gmail.com';
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'contato@vesteretro.com.br';
     const adminHtml = templates.adminNewOrder(data);
     await this.sendEmail({
       to: adminEmail,
