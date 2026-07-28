@@ -77,7 +77,7 @@ export function Header() {
       </div>
 
       {/* Main Header */}
-      <div className="container-vr flex items-center justify-between gap-6 py-4">
+      <div className="container-vr flex items-center justify-between gap-6 py-5">
         {/* Logo */}
         <Link
           to="/"
@@ -87,7 +87,7 @@ export function Header() {
           <img
             src={LOGO_URL}
             alt="VesteRetro — Vista a História"
-            className="max-h-[46px] w-auto sm:max-h-[50px] md:max-h-[60px] object-contain mix-blend-lighten"
+            className="max-h-[64px] w-auto sm:max-h-[70px] md:max-h-[82px] object-contain mix-blend-lighten"
             loading="eager"
           />
         </Link>
