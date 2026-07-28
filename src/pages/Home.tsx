@@ -214,7 +214,7 @@ export default function Home() {
             href="/lancamentos"
             linkText="Ver todos os lançamentos"
           />
-          <HorizontalCarousel autoPlay={6000}>
+          <HorizontalCarousel autoPlay={3500} transition={700} loop>
             {lancamentos.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -232,7 +232,7 @@ export default function Home() {
             href="/promocoes"
             linkText="Ver todas as promoções"
           />
-          <HorizontalCarousel autoPlay={6000}>
+          <HorizontalCarousel autoPlay={3500} transition={700} loop>
             {promocoes.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -250,7 +250,7 @@ export default function Home() {
             href="/todos-os-produtos"
             linkText="Ver todas as camisas retrô"
           />
-          <HorizontalCarousel autoPlay={7000}>
+          <HorizontalCarousel autoPlay={3500} transition={700} loop>
             {retroMaisProcurados.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -268,7 +268,7 @@ export default function Home() {
             href="/selecoes"
             linkText="Ver todas as seleções"
           />
-          <HorizontalCarousel autoPlay={7000}>
+          <HorizontalCarousel autoPlay={3500} transition={700} loop>
             {selecoes.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -286,7 +286,7 @@ export default function Home() {
             href="/categoria/nba"
             linkText="Ver todos os modelos NBA"
           />
-          <HorizontalCarousel autoPlay={6000}>
+          <HorizontalCarousel autoPlay={3500} transition={700} loop>
             {nba.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
