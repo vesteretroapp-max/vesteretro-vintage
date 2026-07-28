@@ -1,38 +1,101 @@
 import { Link } from "react-router";
 import {
   ArrowRight,
-  Award,
   ShieldCheck,
   MessageCircle,
   Sparkles,
   Truck,
   CreditCard,
   Trophy,
+  Percent,
+  Clock,
 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
+import { HorizontalCarousel } from "@/components/HorizontalCarousel";
 import { demoProducts, decades } from "@/data/products";
 
-// Working Unsplash image URLs for editorial section
+// Editorial images
 const EDITORIAL_IMAGES = [
   "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80",
   "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&q=80",
   "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80",
 ];
 
+/** Section header shared across all carousel sections */
+function SectionHeader({
+  eyebrow,
+  title,
+  subtitle,
+  href,
+  linkText,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  href?: string;
+  linkText?: string;
+}) {
+  return (
+    <div className="flex items-end justify-between gap-4 mb-8">
+      <div className="flex-1 min-w-0">
+        <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+          {eyebrow}
+        </p>
+        <h2 className="mt-2 font-display text-2xl md:text-3xl lg:text-4xl">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-2 text-sm text-muted-foreground max-w-xl">
+            {subtitle}
+          </p>
+        )}
+      </div>
+      {href && (
+        <Link
+          to={href}
+          className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
+        >
+          {linkText || "Ver todos"}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
-  // Product slices for each section
-  const lancamentos = demoProducts.slice(0, 8);
-  const brasilProducts = demoProducts.filter((p) => p.category === "brasil").slice(0, 4);
-  const mundoProducts = demoProducts.filter((p) => p.category === "mundo").slice(0, 4);
-  const selecoesProducts = demoProducts.filter((p) => p.category === "selecoes").slice(0, 4);
+  // ---- Product sections ----
+  // Lançamentos: newest products marked as isNew or recent
+  const lancamentos = demoProducts
+    .filter((p) => p.isNew || p.isLaunch)
+    .sort((a, b) => (b.homepageOrder ?? 99) - (a.homepageOrder ?? 99));
+
+  // Promoções: products with active sale price
+  const promocoes = demoProducts
+    .filter((p) => p.isOnSale || p.isPromotion)
+    .sort((a, b) => (b.homepageOrder ?? 99) - (a.homepageOrder ?? 99));
+
+  // Retrô mais procurados: featured retro products
+  const retroMaisProcurados = demoProducts
+    .filter((p) => p.isRetro || p.isBestSeller)
+    .sort((a, b) => (b.salesCount ?? 0) - (a.salesCount ?? 0));
+
+  // Seleções: all selecoes category
+  const selecoes = demoProducts
+    .filter((p) => p.category === "selecoes")
+    .sort((a, b) => (b.homepageOrder ?? 99) - (a.homepageOrder ?? 99));
+
+  // NBA: all nba category
+  const nba = demoProducts
+    .filter((p) => p.category === "nba")
+    .sort((a, b) => (a.homepageOrder ?? 99) - (b.homepageOrder ?? 99));
 
   return (
     <div>
-      {/* ============ HERO SECTION ============ */}
+      {/* ============ 1. HERO ============ */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,color-mix(in_oklab,var(--gold)_10%,transparent),transparent_60%)]" />
         <div className="container-vr grid gap-10 py-16 md:grid-cols-[1fr_1.3fr] md:py-24 md:gap-12 items-center">
-          {/* Left: Text */}
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
               Coleção Retrô Premium
@@ -80,7 +143,6 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          {/* Right: Hero image */}
           <div className="relative">
             <div className="absolute -inset-6 -z-10 rounded-full bg-[var(--gold)]/10 blur-3xl" />
             <div className="w-full overflow-hidden rounded-2xl border border-[var(--border-gold)] shadow-lg">
@@ -95,50 +157,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ CATEGORIES SECTION ============ */}
-      <section className="container-vr py-20">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Explore
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Nossas categorias
-            </h2>
-          </div>
-        </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* ============ 2. BENEFITS (top bar) ============ */}
+      <section className="border-b border-border bg-surface py-5">
+        <div className="container-vr flex items-center justify-center gap-6 overflow-x-auto text-xs text-muted-foreground">
           {[
-            {
-              name: "Clubes do Brasil",
-              desc: "Do Maracanã ao Beira-Rio",
-              href: "/clubes-do-brasil",
-            },
-            {
-              name: "Clubes do Mundo",
-              desc: "As lendas da Europa e América",
-              href: "/clubes-do-mundo",
-            },
-            {
-              name: "Seleções",
-              desc: "Copas que fizeram história",
-              href: "/selecoes",
-            },
-            {
-              name: "Lançamentos",
-              desc: "As novidades da temporada",
-              href: "/lancamentos",
-            },
-            {
-              name: "Promoções",
-              desc: "Ofertas selecionadas",
-              href: "/promocoes",
-            },
-            {
-              name: "Todas as camisas",
-              desc: "Explore o catálogo completo",
-              href: "/todos-os-produtos",
-            },
+            { icon: ShieldCheck, text: "Compra 100% segura" },
+            { icon: Truck, text: "Envio para todo o Brasil" },
+            { icon: CreditCard, text: "Parcele em até 12x" },
+            { icon: MessageCircle, text: "Atendimento via WhatsApp" },
+          ].map((item) => (
+            <span key={item.text} className="flex items-center gap-2 whitespace-nowrap">
+              <item.icon className="h-3.5 w-3.5 text-[var(--gold)]" />
+              {item.text}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ 3. CATEGORIES ============ */}
+      <section className="container-vr py-16 md:py-20">
+        <SectionHeader
+          eyebrow="Explore"
+          title="Nossas categorias"
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { name: "Clubes do Brasil", desc: "Do Maracanã ao Beira-Rio", href: "/clubes-do-brasil" },
+            { name: "Clubes do Mundo", desc: "As lendas da Europa e América", href: "/clubes-do-mundo" },
+            { name: "Seleções", desc: "Copas que fizeram história", href: "/selecoes" },
+            { name: "NBA Classics", desc: "Regatas históricas do basquete", href: "/categoria/nba" },
+            { name: "Promoções", desc: "Ofertas selecionadas", href: "/promocoes" },
+            { name: "Todas as camisas", desc: "Explore o catálogo completo", href: "/todos-os-produtos" },
           ].map((cat) => (
             <Link
               key={cat.name}
@@ -155,153 +204,103 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ LANÇAMENTOS SECTION ============ */}
-      <section className="container-vr py-16">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Chegaram agora
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Lançamentos
-            </h2>
-          </div>
-          <Link
-            to="/lancamentos"
-            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
-          >
-            Ver todos
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {lancamentos.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* ============ CLUBE BRASIL SECTION ============ */}
-      <section className="container-vr py-16">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Do Brasil com paixão
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Do Brasil com paixão
-            </h2>
-          </div>
-          <Link
-            to="/clubes-do-brasil"
-            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
-          >
-            Ver todos
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {brasilProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* ============ CLUBE MUNDO SECTION ============ */}
-      <section className="container-vr py-16">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Europa e América em campo
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Europa e América em campo
-            </h2>
-          </div>
-          <Link
-            to="/clubes-do-mundo"
-            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
-          >
-            Ver todos
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {mundoProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* ============ SELEÇÕES SECTION ============ */}
-      <section className="container-vr py-16">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Seleções eternas
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Seleções eternas
-            </h2>
-          </div>
-          <Link
-            to="/selecoes"
-            className="hidden shrink-0 items-center gap-2 text-sm text-[var(--gold)] hover:underline sm:inline-flex"
-          >
-            Ver todos
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {selecoesProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* ============ DÉCADAS SECTION ============ */}
-      <section className="border-y border-border bg-surface py-20">
-        <div className="container-vr">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-                Viagem no tempo
-              </p>
-              <h2 className="mt-2 font-display text-3xl md:text-4xl">
-                Compre por década
-              </h2>
-            </div>
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {decades.map((d) => (
-              <Link
-                key={d.value}
-                to={`/busca?decada=${d.value}`}
-                className="group relative overflow-hidden rounded-lg border border-border bg-background p-8 text-center transition hover:border-[var(--gold)]"
-              >
-                <p className="font-display text-3xl">{d.label.replace("s", "")}</p>
-                <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-[var(--gold)] transition-colors">
-                  Explorar década
-                </p>
-              </Link>
+      {/* ============ 4. LANÇAMENTOS ============ */}
+      {lancamentos.length > 0 && (
+        <section className="container-vr py-16 md:py-20">
+          <SectionHeader
+            eyebrow="Chegaram agora"
+            title="Lançamentos 2026/2027"
+            subtitle="Os novos mantos dos maiores clubes do Brasil e da Europa."
+            href="/lancamentos"
+            linkText="Ver todos os lançamentos"
+          />
+          <HorizontalCarousel autoPlay={6000}>
+            {lancamentos.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
-          </div>
-        </div>
-      </section>
+          </HorizontalCarousel>
+        </section>
+      )}
 
-      {/* ============ EDITORIAL SECTION ============ */}
+      {/* ============ 5. PROMOÇÕES ============ */}
+      {promocoes.length > 0 && (
+        <section className="container-vr py-16 md:py-20 border-t border-border">
+          <SectionHeader
+            eyebrow="Ofertas especiais"
+            title="Modelos em promoção"
+            subtitle="Modelos selecionados com condições especiais por tempo limitado."
+            href="/promocoes"
+            linkText="Ver todas as promoções"
+          />
+          <HorizontalCarousel autoPlay={6000}>
+            {promocoes.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </HorizontalCarousel>
+        </section>
+      )}
+
+      {/* ============ 6. CLÁSSICOS MAIS PROCURADOS ============ */}
+      {retroMaisProcurados.length > 0 && (
+        <section className="container-vr py-16 md:py-20 border-t border-border">
+          <SectionHeader
+            eyebrow="Mais procurados"
+            title="Clássicos mais procurados"
+            subtitle="Os mantos históricos que continuam conquistando gerações."
+            href="/todos-os-produtos"
+            linkText="Ver todas as camisas retrô"
+          />
+          <HorizontalCarousel autoPlay={7000}>
+            {retroMaisProcurados.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </HorizontalCarousel>
+        </section>
+      )}
+
+      {/* ============ 7. SELEÇÕES ============ */}
+      {selecoes.length > 0 && (
+        <section className="container-vr py-16 md:py-20 border-t border-border">
+          <SectionHeader
+            eyebrow="Seleções eternas"
+            title="Seleções históricas"
+            subtitle="Camisas que marcaram Copas do Mundo e momentos inesquecíveis."
+            href="/selecoes"
+            linkText="Ver todas as seleções"
+          />
+          <HorizontalCarousel autoPlay={7000}>
+            {selecoes.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </HorizontalCarousel>
+        </section>
+      )}
+
+      {/* ============ 8. NBA ============ */}
+      {nba.length > 0 && (
+        <section className="container-vr py-16 md:py-20 border-t border-border">
+          <SectionHeader
+            eyebrow="Basquete"
+            title="NBA Classics"
+            subtitle="Regatas históricas das maiores franquias do basquete mundial."
+            href="/categoria/nba"
+            linkText="Ver todos os modelos NBA"
+          />
+          <HorizontalCarousel autoPlay={6000}>
+            {nba.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </HorizontalCarousel>
+        </section>
+      )}
+
+      {/* ============ 9. EDITORIAL ============ */}
       <section className="container-vr py-20">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              Editorial
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              A história por trás do manto
-            </h2>
-          </div>
-        </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <SectionHeader
+          eyebrow="Editorial"
+          title="A história por trás do manto"
+        />
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
           {[
             {
               year: "1970",
@@ -333,7 +332,6 @@ export default function Home() {
               to={article.slug}
               className="card-premium group relative rounded-lg overflow-hidden transition-all"
             >
-              {/* Background image */}
               <div className="absolute inset-0">
                 <img
                   src={EDITORIAL_IMAGES[article.img]}
@@ -343,8 +341,6 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-surface/60" />
               </div>
-
-              {/* Content */}
               <div className="relative p-6 lg:p-8">
                 <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--gold)]">
                   {article.year} · {article.competition}
@@ -363,8 +359,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ BENEFITS SECTION ============ */}
-      <section className="border-y border-border bg-surface py-14">
+      {/* ============ 10. DÉCADAS ============ */}
+      <section className="border-y border-border bg-surface py-20">
+        <div className="container-vr">
+          <SectionHeader
+            eyebrow="Viagem no tempo"
+            title="Compre por década"
+          />
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {decades.map((d) => (
+              <Link
+                key={d.value}
+                to={`/busca?decada=${d.value}`}
+                className="group relative overflow-hidden rounded-lg border border-border bg-background p-8 text-center transition hover:border-[var(--gold)]"
+              >
+                <p className="font-display text-3xl">{d.label.replace("s", "")}</p>
+                <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-[var(--gold)] transition-colors">
+                  Explorar década
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ 11. BENEFITS (full section) ============ */}
+      <section className="border-b border-border bg-surface py-14">
         <div className="container-vr grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
           {[
             { icon: ShieldCheck, label: "Compra protegida" },
@@ -387,7 +407,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ NEWSLETTER SECTION ============ */}
+      {/* ============ 12. NEWSLETTER ============ */}
       <section className="container-vr py-20">
         <div className="mx-auto max-w-3xl rounded-2xl border border-[var(--border-gold)] bg-gradient-to-br from-surface via-surface-2 to-background p-10 text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
@@ -441,18 +461,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ INSTAGRAM SECTION ============ */}
+      {/* ============ 13. INSTAGRAM ============ */}
       <section className="container-vr pb-24">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
-              @vesteretro
-            </p>
-            <h2 className="mt-2 font-display text-3xl md:text-4xl">
-              Siga no Instagram
-            </h2>
-          </div>
-        </div>
+        <SectionHeader
+          eyebrow="@vesteretro"
+          title="Siga no Instagram"
+        />
         <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <a
