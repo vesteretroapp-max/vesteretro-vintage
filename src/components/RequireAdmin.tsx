@@ -6,6 +6,12 @@ import { Navigate } from "react-router";
 export function RequireAdmin({ children }: { children: ReactNode }) {
   const { isLoading, isAuthenticated, profile } = useSupabaseAuth();
 
+  // In demo mode (no Supabase configured), allow admin access to everyone
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  if (!supabaseUrl) {
+    return <>{children}</>;
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#090B0B]">
@@ -16,13 +22,6 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
 
   if (!isAuthenticated) {
     return <Navigate to="/entrar?returnTo=/admin" replace />;
-  }
-
-  // In demo mode (no Supabase), allow admin access
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  if (!supabaseUrl) {
-    // Demo mode — everyone is admin
-    return <>{children}</>;
   }
 
   if (profile && profile.role !== "admin") {
