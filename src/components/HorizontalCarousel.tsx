@@ -3,58 +3,38 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface HorizontalCarouselProps {
   children: React.ReactNode[];
-  /** Items visible per breakpoint */
   show?: { base?: number; sm?: number; md?: number; lg?: number; xl?: number };
-  /** Gap between items in px */
   gap?: number;
-  /** Autoplay interval in ms (0 = disabled) */
   autoPlay?: number;
-  /** Transition duration in ms */
   transition?: number;
-  /** Whether to loop infinitely */
   loop?: boolean;
-  /** Class applied to each item wrapper */
   itemClassName?: string;
 }
 
-const DEFAULT_SHOW = {
-  base: 1.3,
-  sm: 2.3,
-  md: 3.3,
-  lg: 4.3,
-  xl: 5.3,
-};
-
-const TRANSITION_DEFAULT = 700;
-const AUTOPLAY_DEFAULT = 3500;
+const DEFAULT_SHOW = { base: 1.3, sm: 2.3, md: 3.3, lg: 4.3, xl: 5.3 };
 
 export function HorizontalCarousel({
   children,
   show: showProp,
   gap = 16,
-  autoPlay = AUTOPLAY_DEFAULT,
-  transition = TRANSITION_DEFAULT,
+  autoPlay = 3500,
+  transition = 700,
   loop = true,
   itemClassName = "",
 }: HorizontalCarouselProps) {
   const show = { ...DEFAULT_SHOW, ...showProp };
-  const trackRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1280,
   );
+  const [isPaused, setIsPaused] = useState(false);
+  const [position, setPosition] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [containerWidth, setContainerWidth] = useState(0);
+
   const totalItems = children.length;
 
-  // Respect prefers-reduced-motion
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  // Calculate visible count based on viewport
+  // Visible count
   const getVisibleCount = useCallback(() => {
     const w = windowWidth;
     if (w >= 1280) return show.xl!;
@@ -66,80 +46,42 @@ export function HorizontalCarousel({
 
   const visibleCount = getVisibleCount();
   const floorVisible = Math.floor(visibleCount);
-  const maxIndex = Math.max(0, totalItems - floorVisible);
 
-  // For infinite loop: we prepend last N items and append first N items
+  // Clone count for infinite loop
   const cloneCount = loop ? Math.min(floorVisible, totalItems) : 0;
 
+  // All slides: [lastN, ...original, firstN]
   const slides = useMemo(() => {
-    if (!loop || totalItems === 0) return children;
-    // Clone: [...lastN, ...original, ...firstN]
+    if (!loop || totalItems === 0) return [...children];
     const lastN = children.slice(totalItems - cloneCount);
     const firstN = children.slice(0, cloneCount);
     return [...lastN, ...children, ...firstN];
-  }, [children, children.length, loop, cloneCount, totalItems]);
+  }, [children, loop, cloneCount, totalItems]);
 
-  // The "real" index in the cloned array (offset by cloneCount)
-  const slideIndex = loop ? currentIndex + cloneCount : currentIndex;
+  const totalSlides = slides.length;
 
-  // Calculate translation offset
-  const getTranslateX = useCallback(() => {
-    if (!containerRef.current) return 0;
-    const containerWidth = containerRef.current.offsetWidth;
-    const itemWidth = (containerWidth - gap * (visibleCount - 1)) / visibleCount;
-    return -(slideIndex * (itemWidth + gap));
-  }, [slideIndex, visibleCount, gap]);
+  // Item width calculation
+  const itemWidth = useMemo(() => {
+    if (!containerWidth || !visibleCount) return 0;
+    return (containerWidth - gap * (visibleCount - 1)) / visibleCount;
+  }, [containerWidth, visibleCount, gap]);
 
-  // Go to a specific "real" index (0-based among original items)
-  const goTo = useCallback(
-    (index: number, instant = false) => {
-      if (isTransitioning && !instant) return;
-      const clamped = loop
-        ? ((index % totalItems) + totalItems) % totalItems
-        : Math.max(0, Math.min(index, maxIndex));
+  // Current real index (0-based among original items)
+  const realIndex = loop
+    ? ((position - cloneCount) % totalItems + totalItems) % totalItems
+    : Math.max(0, Math.min(position, totalItems - floorVisible));
 
-      if (instant) {
-        setIsTransitioning(false);
-        setCurrentIndex(clamped);
-        return;
+  // Measure container
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const obs = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
       }
-
-      setIsTransitioning(true);
-      setCurrentIndex(clamped);
-      setTimeout(() => setIsTransitioning(false), transition);
-    },
-    [isTransitioning, loop, totalItems, maxIndex, transition],
-  );
-
-  const goNext = useCallback(() => goTo(currentIndex + 1), [goTo, currentIndex]);
-  const goPrev = useCallback(() => goTo(currentIndex - 1), [goTo, currentIndex]);
-
-  // Snap back after clone transition finishes (for infinite loop)
-  useEffect(() => {
-    if (!loop || totalItems === 0) return;
-    // When at the "end" clone (showing first items), snap back instantly
-    if (currentIndex >= totalItems) {
-      const timer = setTimeout(() => {
-        goTo(0, true);
-      }, transition);
-      return () => clearTimeout(timer);
-    }
-    // When at the "start" clone (showing last items), snap back instantly
-    if (currentIndex < 0) {
-      const timer = setTimeout(() => {
-        goTo(totalItems + currentIndex, true);
-      }, transition);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, loop, totalItems, transition, goTo]);
-
-  // Autoplay
-  useEffect(() => {
-    if (!autoPlay || isHovered || prefersReducedMotion || totalItems <= floorVisible)
-      return;
-    const timer = setInterval(goNext, autoPlay);
-    return () => clearInterval(timer);
-  }, [autoPlay, isHovered, prefersReducedMotion, goNext, totalItems, floorVisible]);
+    });
+    obs.observe(containerRef.current);
+    return () => obs.disconnect();
+  }, []);
 
   // Window resize
   useEffect(() => {
@@ -148,17 +90,103 @@ export function HorizontalCarousel({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Keyboard navigation
+  // Wrap-around: after transition, instantly snap to equivalent real position
+  useEffect(() => {
+    if (!loop || totalItems === 0 || !isAnimating) return;
+
+    // Went past last clone → snap to first real position
+    if (position >= totalItems + cloneCount) {
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+        setPosition(cloneCount);
+        // Re-enable animation after DOM update
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setIsAnimating(true));
+        });
+      }, transition);
+      return () => clearTimeout(timer);
+    }
+
+    // Went before first clone → snap to last real position
+    if (position < cloneCount) {
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+        setPosition(totalItems + cloneCount - 1);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setIsAnimating(true));
+        });
+      }, transition);
+      return () => clearTimeout(timer);
+    }
+  }, [position, loop, totalItems, cloneCount, transition, isAnimating]);
+
+  // Autoplay — uses functional setState to avoid stale closures
+  useEffect(() => {
+    if (!autoPlay || isPaused || totalItems <= floorVisible) return;
+    if (typeof window === "undefined") return;
+
+    // Respect prefers-reduced-motion
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) return;
+
+    const timer = window.setInterval(() => {
+      setPosition((prev) => prev + 1);
+    }, autoPlay);
+
+    return () => window.clearInterval(timer);
+  }, [autoPlay, isPaused, totalItems, floorVisible]);
+
+  // Pause on tab hidden
+  useEffect(() => {
+    if (!autoPlay) return;
+    const handleVisibility = () => {
+      if (document.hidden) {
+        setIsPaused(true);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [autoPlay]);
+
+  // Resume when tab becomes visible (with small delay)
+  useEffect(() => {
+    if (!autoPlay) return;
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        setTimeout(() => setIsPaused(false), 500);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [autoPlay]);
+
+  // Navigation
+  const goNext = useCallback(() => {
+    setPosition((prev) => prev + 1);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 2000);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setPosition((prev) => prev - 1);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 2000);
+  }, []);
+
+  const goToReal = useCallback(
+    (index: number) => {
+      setPosition(cloneCount + index);
+      setIsPaused(true);
+      setTimeout(() => setIsPaused(false), 2000);
+    },
+    [cloneCount],
+  );
+
+  // Keyboard
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goPrev();
-      }
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        goNext();
-      }
+      if (e.key === "ArrowLeft") { e.preventDefault(); goPrev(); }
+      if (e.key === "ArrowRight") { e.preventDefault(); goNext(); }
     },
     [goPrev, goNext],
   );
@@ -167,23 +195,16 @@ export function HorizontalCarousel({
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const touchDelta = useRef(0);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStart.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-      touchDelta.current = 0;
-      setIsHovered(true); // pause autoplay during touch
-    },
-    [],
-  );
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    touchDelta.current = 0;
+    setIsPaused(true);
+  }, []);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!touchStart.current) return;
     const dx = e.touches[0].clientX - touchStart.current.x;
     const dy = e.touches[0].clientY - touchStart.current.y;
-    // Only horizontal swipe
     if (Math.abs(dx) > Math.abs(dy)) {
       touchDelta.current = dx;
     }
@@ -192,36 +213,36 @@ export function HorizontalCarousel({
   const handleTouchEnd = useCallback(() => {
     const threshold = 50;
     if (touchDelta.current < -threshold) {
-      goNext();
+      setPosition((prev) => prev + 1);
     } else if (touchDelta.current > threshold) {
-      goPrev();
+      setPosition((prev) => prev - 1);
     }
     touchStart.current = null;
     touchDelta.current = 0;
-    // Resume autoplay after a delay
-    setTimeout(() => setIsHovered(false), 2000);
-  }, [goNext, goPrev]);
+    setTimeout(() => setIsPaused(false), 3000);
+  }, []);
 
   if (totalItems === 0) return null;
 
-  // Calculate item width for inline style
-  const itemWidthPercent = 100 / visibleCount;
-  const itemGapStyle = `${gap}px`;
+  // Calculate translateX
+  const translateX = -(position * (itemWidth + gap));
 
-  // For dots: show based on original items
-  const dotCount = Math.min(totalItems, Math.ceil(visibleCount) + 2);
-  const activeDot = loop
-    ? ((currentIndex % totalItems) + totalItems) % totalItems
-    : currentIndex;
+  // Dots
+  const dotCount = loop
+    ? Math.min(totalItems, Math.ceil(visibleCount) + 2)
+    : Math.min(totalItems, Math.ceil(visibleCount) + 1);
+  const activeDot = realIndex;
 
-  const translateX = getTranslateX();
+  // Arrow visibility
+  const canGoPrev = loop || position > 0;
+  const canGoNext = loop || position < totalItems - floorVisible;
 
   return (
     <div
       ref={containerRef}
       className="relative group/carousel"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       onKeyDown={handleKeyDown}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -234,12 +255,11 @@ export function HorizontalCarousel({
       {/* Track */}
       <div className="overflow-hidden">
         <div
-          ref={trackRef}
           className="flex"
           style={{
-            gap: itemGapStyle,
+            gap: `${gap}px`,
             transform: `translateX(${translateX}px)`,
-            transition: isTransitioning
+            transition: isAnimating
               ? `transform ${transition}ms cubic-bezier(0.25, 0.1, 0.25, 1)`
               : "none",
           }}
@@ -249,7 +269,7 @@ export function HorizontalCarousel({
               key={i}
               className={`shrink-0 ${itemClassName}`}
               style={{
-                width: `calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount})`,
+                width: itemWidth > 0 ? `${itemWidth}px` : `calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount})`,
                 minWidth: "200px",
               }}
               role="group"
@@ -262,8 +282,8 @@ export function HorizontalCarousel({
         </div>
       </div>
 
-      {/* Prev arrow — desktop only, visible on hover */}
-      {loop || currentIndex > 0 ? (
+      {/* Prev arrow */}
+      {canGoPrev && (
         <button
           onClick={goPrev}
           aria-label="Anterior"
@@ -271,10 +291,10 @@ export function HorizontalCarousel({
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
-      ) : null}
+      )}
 
-      {/* Next arrow — desktop only, visible on hover */}
-      {loop || currentIndex < maxIndex ? (
+      {/* Next arrow */}
+      {canGoNext && (
         <button
           onClick={goNext}
           aria-label="Próximo"
@@ -282,15 +302,15 @@ export function HorizontalCarousel({
         >
           <ChevronRight className="h-5 w-5" />
         </button>
-      ) : null}
+      )}
 
-      {/* Dots indicator — visible on all viewports */}
+      {/* Dots */}
       {totalItems > floorVisible && (
         <div className="flex items-center justify-center gap-2 mt-5">
           {Array.from({ length: dotCount }).map((_, i) => (
             <button
               key={i}
-              onClick={() => goTo(i)}
+              onClick={() => goToReal(i)}
               aria-label={`Ir para slide ${i + 1}`}
               aria-current={i === activeDot ? "true" : undefined}
               className={`rounded-full transition-all duration-300 ${
