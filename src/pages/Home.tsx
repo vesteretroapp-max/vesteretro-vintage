@@ -7,12 +7,10 @@ import {
   Truck,
   CreditCard,
   Trophy,
-  Percent,
-  Clock,
 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { HorizontalCarousel } from "@/components/HorizontalCarousel";
-import { demoProducts, decades } from "@/data/products";
+import { demoProducts } from "@/data/products";
 
 // Editorial images
 const EDITORIAL_IMAGES = [
@@ -359,31 +357,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ 10. DÉCADAS ============ */}
-      <section className="border-y border-border bg-surface py-20">
-        <div className="container-vr">
-          <SectionHeader
-            eyebrow="Viagem no tempo"
-            title="Compre por década"
-          />
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {decades.map((d) => (
-              <Link
-                key={d.value}
-                to={`/busca?decada=${d.value}`}
-                className="group relative overflow-hidden rounded-lg border border-border bg-background p-8 text-center transition hover:border-[var(--gold)]"
-              >
-                <p className="font-display text-3xl">{d.label.replace("s", "")}</p>
-                <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-[var(--gold)] transition-colors">
-                  Explorar década
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ 11. BENEFITS (full section) ============ */}
+      {/* ============ 10. BENEFITS (full section) ============ */}
       <section className="border-b border-border bg-surface py-14">
         <div className="container-vr grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
           {[
