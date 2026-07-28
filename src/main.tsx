@@ -1,6 +1,7 @@
 import '@vly-ai/integrations';
 import { Toaster } from "@/components/ui/sonner";
 import { RequireAuth } from "@/components/RequireAuth";
+import { RequireAdmin } from "@/components/RequireAdmin";
 import { VlyToolbar } from "../vly-toolbar-readonly.tsx";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { ConvexReactClient } from "convex/react";
@@ -30,7 +31,23 @@ const MinhaConta = lazy(() => import("./pages/MinhaConta.tsx"));
 const MeusPedidos = lazy(() => import("./pages/MeusPedidos.tsx"));
 const Favorites = lazy(() => import("./pages/Favorites.tsx"));
 const Tracking = lazy(() => import("./pages/Tracking.tsx"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard.tsx"));
+const AdminLayout = lazy(() => import("@/components/admin/AdminLayout.tsx").then(m => ({ default: m.AdminLayout })));
+const AdminDashboardPage = lazy(() => import("./pages/admin/Dashboard.tsx"));
+const AdminProductsPage = lazy(() => import("./pages/admin/Products.tsx"));
+const AdminOrdersPage = lazy(() => import("./pages/admin/Orders.tsx"));
+const AdminCustomersPage = lazy(() => import("./pages/admin/Customers.tsx"));
+const AdminCategoriesPage = lazy(() => import("./pages/admin/Categories.tsx"));
+const AdminClubsPage = lazy(() => import("./pages/admin/Clubs.tsx"));
+const AdminStockPage = lazy(() => import("./pages/admin/Stock.tsx"));
+const AdminCouponsPage = lazy(() => import("./pages/admin/Coupons.tsx"));
+const AdminBannersPage = lazy(() => import("./pages/admin/Banners.tsx"));
+const AdminReviewsPage = lazy(() => import("./pages/admin/Reviews.tsx"));
+const AdminNewsletterPage = lazy(() => import("./pages/admin/Newsletter.tsx"));
+const AdminImportPage = lazy(() => import("./pages/admin/Import.tsx"));
+const AdminShippingPage = lazy(() => import("./pages/admin/Shipping.tsx"));
+const AdminPaymentsPage = lazy(() => import("./pages/admin/Payments.tsx"));
+const AdminSettingsPage = lazy(() => import("./pages/admin/Settings.tsx"));
+const AdminLogsPage = lazy(() => import("./pages/admin/Logs.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 // Lazy loaded static pages
@@ -276,19 +293,33 @@ createRoot(document.getElementById("root")!).render(
               <Route
                 path="/admin"
                 element={
-                  <RequireAuth>
-                    <AdminDashboard />
-                  </RequireAuth>
+                  <RequireAdmin>
+                    <Suspense fallback={<RouteLoading />}>
+                      <AdminLayout />
+                    </Suspense>
+                  </RequireAdmin>
                 }
-              />
-              <Route
-                path="/admin/*"
-                element={
-                  <RequireAuth>
-                    <AdminDashboard />
-                  </RequireAuth>
-                }
-              />
+              >
+                <Route index element={<AdminDashboardPage />} />
+                <Route path="pedidos" element={<AdminOrdersPage />} />
+                <Route path="produtos" element={<AdminProductsPage />} />
+                <Route path="produtos/novo" element={<AdminProductsPage />} />
+                <Route path="produtos/:id/editar" element={<AdminProductsPage />} />
+                <Route path="clientes" element={<AdminCustomersPage />} />
+                <Route path="categorias" element={<AdminCategoriesPage />} />
+                <Route path="clubes" element={<AdminClubsPage />} />
+                <Route path="selecoes" element={<AdminClubsPage />} />
+                <Route path="estoque" element={<AdminStockPage />} />
+                <Route path="cupons" element={<AdminCouponsPage />} />
+                <Route path="banners" element={<AdminBannersPage />} />
+                <Route path="avaliacoes" element={<AdminReviewsPage />} />
+                <Route path="newsletter" element={<AdminNewsletterPage />} />
+                <Route path="importacao" element={<AdminImportPage />} />
+                <Route path="fretes" element={<AdminShippingPage />} />
+                <Route path="pagamentos" element={<AdminPaymentsPage />} />
+                <Route path="configuracoes" element={<AdminSettingsPage />} />
+                <Route path="logs" element={<AdminLogsPage />} />
+              </Route>
 
               <Route path="*" element={<NotFound />} />
             </Routes>
