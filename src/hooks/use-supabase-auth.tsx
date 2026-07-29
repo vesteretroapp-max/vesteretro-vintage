@@ -124,7 +124,7 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     marketing_consent?: boolean;
   }) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -137,12 +137,39 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         },
       });
 
+      // Log the full Supabase response for debugging
+      console.log("[Auth] signUp response:", { user: data?.user?.id, error: error?.message, status: error?.status });
+
       if (error) {
-        const message =
-          error.message === "User already registered"
-            ? "Este e-mail já está cadastrado. Faça login ou recupere sua senha."
-            : "Não foi possível criar sua conta. Verifique os dados e tente novamente.";
+        console.error("[Auth] signUp error:", error.message, error.status);
+        let message: string;
+        switch (error.message) {
+          case "User already registered":
+          case "A user with this email address has already been registered":
+            message = "Este e-mail já está cadastrado. Faça login ou recupere sua senha.";
+            break;
+          case "Signup is disabled":
+            message = "O cadastro está temporariamente desabilitado. Entre em contato conosco.";
+            break;
+          case "Unable to validate email address: invalid format":
+            message = "E-mail inválido. Verifique o formato e tente novamente.";
+            break;
+          case "Password should be at least 8 characters":
+          case "Password is too short":
+            message = "A senha deve ter pelo menos 8 caracteres.";
+            break;
+          default:
+            // Show the actual Supabase error in development, generic in production
+            message = typeof window !== "undefined" && window.location.hostname === "localhost"
+              ? `Erro: ${error.message}`
+              : "Não foi possível criar sua conta. Verifique os dados e tente novamente.";
+        }
         return { error: message };
+      }
+
+      // If no error but also no user, it means email confirmation is required
+      if (data?.user && !data?.session) {
+        console.log("[Auth] signUp success — email confirmation required");
       }
 
       return { error: null };
