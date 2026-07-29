@@ -128,6 +128,7 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         email,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
           data: {
             full_name,
             whatsapp: whatsapp || null,
@@ -217,7 +218,7 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
   const resetPassword = async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/redefinir-senha`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       });
 
       if (error) {
