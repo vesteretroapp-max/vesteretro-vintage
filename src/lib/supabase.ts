@@ -93,11 +93,15 @@ if (supabaseUrl && supabaseAnonKey) {
       detectSessionInUrl: true,
     },
   });
+  if (typeof window !== "undefined") {
+    console.log("[Supabase] Client configured successfully.");
+  }
 } else {
   if (typeof window !== "undefined") {
-    console.warn(
-      "[Supabase] Not configured — running in offline/demo mode. " +
-      "Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment."
+    console.error(
+      "[Supabase] ⚠️ NOT CONFIGURED — VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY are missing! " +
+      "Auth, database, and storage will NOT work. " +
+      "Add these variables in your hosting platform (Netlify → Site configuration → Environment variables)."
     );
   }
   supabase = createMockClient();

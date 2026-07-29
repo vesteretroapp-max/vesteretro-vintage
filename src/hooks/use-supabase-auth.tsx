@@ -141,7 +141,8 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       console.log("[Auth] signUp response:", { user: data?.user?.id, error: error?.message, status: error?.status });
 
       if (error) {
-        console.error("[Auth] signUp error:", error.message, error.status);
+        // Always log the actual Supabase error for debugging
+        console.error("[Auth] signUp error:", error.message, "status:", error.status, "code:", (error as unknown as Record<string, unknown>).code);
         let message: string;
         switch (error.message) {
           case "User already registered":
@@ -152,17 +153,20 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
             message = "O cadastro está temporariamente desabilitado. Entre em contato conosco.";
             break;
           case "Unable to validate email address: invalid format":
+          case "Invalid email":
             message = "E-mail inválido. Verifique o formato e tente novamente.";
             break;
           case "Password should be at least 8 characters":
           case "Password is too short":
             message = "A senha deve ter pelo menos 8 caracteres.";
             break;
+          case "Over email rate limit":
+          case "Email rate limit exceeded":
+            message = "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
+            break;
           default:
-            // Show the actual Supabase error in development, generic in production
-            message = typeof window !== "undefined" && window.location.hostname === "localhost"
-              ? `Erro: ${error.message}`
-              : "Não foi possível criar sua conta. Verifique os dados e tente novamente.";
+            // Always show the actual Supabase error so the user can report it
+            message = `Erro ao criar conta: ${error.message}`;
         }
         return { error: message };
       }
@@ -189,34 +193,30 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       });
 
       if (error) {
-        // Log technical error details for debugging (never log passwords or tokens)
-        console.error("[Auth] signIn error:", error.message, error.status);
+        // Always log the actual Supabase error for debugging
+        console.error("[Auth] signIn error:", error.message, "status:", error.status, "code:", (error as unknown as Record<string, unknown>).code);
 
         // Map Supabase error codes to friendly Portuguese messages
         let message: string;
         switch (error.message) {
           case "Invalid login credentials":
+          case "Invalid email or password":
+          case "User not found":
             message = "E-mail ou senha incorretos.";
             break;
           case "Email not confirmed":
           case "email_not_confirmed":
+          case "Email address \"%s\" has not been confirmed":
             message = "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada e spam.";
             break;
           case "Too many requests":
           case "too_many_requests":
+          case "Email rate limit exceeded":
             message = "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
             break;
-          case "Invalid email or password":
-            message = "E-mail ou senha incorretos.";
-            break;
-          case "User not found":
-            message = "E-mail ou senha incorretos.";
-            break;
-          case "Email rate limit exceeded":
-            message = "Limite de tentativas atingido. Aguarde alguns minutos.";
-            break;
           default:
-            message = "Não foi possível entrar. Verifique seus dados e tente novamente.";
+            // Always show the actual Supabase error so the user can report it
+            message = `Erro ao entrar: ${error.message}`;
         }
         return { error: message };
       }
