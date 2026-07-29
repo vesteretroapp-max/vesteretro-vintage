@@ -158,7 +158,16 @@ class RootErrorBoundary extends React.Component<
   }
 }
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+// ── Convex client — gracefully handle missing VITE_CONVEX_URL ───────────
+const convexUrl = import.meta.env.VITE_CONVEX_URL;
+const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+
+if (!convexUrl && typeof window !== "undefined") {
+  console.warn(
+    "[Convex] VITE_CONVEX_URL not set — running without Convex. " +
+    "Set it in your Netlify environment variables to enable Convex features."
+  );
+}
 
 function RouteSyncer() {
   const location = useLocation();
@@ -183,6 +192,151 @@ function RouteSyncer() {
   return null;
 }
 
+// ── All routes (shared by both branches to avoid duplication) ───────────
+function AppRoutes() {
+  return (
+    <>
+      <RouteSyncer />
+      <Suspense fallback={<RouteLoading />}>
+        <Routes>
+          {/* Public routes with layout */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/todos-os-produtos" element={<Catalog />} />
+            <Route path="/busca" element={<Catalog />} />
+            <Route path="/lancamentos" element={<Catalog />} />
+            <Route path="/promocoes" element={<Catalog />} />
+            <Route path="/mais-vendidos" element={<Catalog />} />
+            <Route path="/clubes-do-brasil" element={<Catalog />} />
+            <Route path="/clubes-do-brasil/:club" element={<Catalog />} />
+            <Route path="/clubes-do-mundo" element={<Catalog />} />
+            <Route path="/clubes-do-mundo/:club" element={<Catalog />} />
+            <Route path="/selecoes" element={<Catalog />} />
+            <Route path="/selecoes/:team" element={<Catalog />} />
+            <Route path="/categoria/:slug" element={<Catalog />} />
+            <Route path="/produto/:slug" element={<ProductDetail />} />
+            <Route path="/entrar" element={<Login />} />
+            <Route path="/criar-conta" element={<CriarConta />} />
+            <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+            <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+            <Route path="/confirmar-email" element={<ConfirmarEmail />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/carrinho" element={<Carrinho />} />
+            <Route path="/favoritos" element={<Favorites />} />
+            <Route path="/rastreamento" element={<Tracking />} />
+
+            {/* Static pages */}
+            <Route path="/sobre" element={<SobrePage />} />
+            <Route path="/contato" element={<ContatoPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/guia-de-tamanhos" element={<GuiaTamanhosPage />} />
+            <Route path="/privacidade" element={<PolicyPlaceholder title="Política de Privacidade" />} />
+            <Route path="/termos" element={<PolicyPlaceholder title="Termos de Uso" />} />
+            <Route path="/trocas-devolucoes" element={<PolicyPlaceholder title="Política de Trocas e Devoluções" />} />
+            <Route path="/politica-de-envio" element={<PolicyPlaceholder title="Política de Envio" />} />
+            <Route path="/cookies" element={<PolicyPlaceholder title="Política de Cookies" />} />
+          </Route>
+
+          {/* Auth */}
+          <Route
+            path="/auth"
+            element={<AuthPage redirectAfterAuth="/" />}
+          />
+
+          {/* Checkout - no header/footer */}
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/pedido/:orderNumber" element={<OrderConfirmation />} />
+
+          {/* Authenticated routes */}
+          <Route
+            path="/minha-conta"
+            element={
+              <RequireAuth>
+                <MinhaConta />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/minha-conta/dados"
+            element={
+              <RequireAuth>
+                <MinhaConta />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/minha-conta/pedidos"
+            element={
+              <RequireAuth>
+                <MeusPedidos />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/minha-conta/enderecos"
+            element={
+              <RequireAuth>
+                <MinhaContaEnderecos />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/minha-conta/cupons"
+            element={
+              <RequireAuth>
+                <MinhaConta />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/minha-conta/alterar-senha"
+            element={
+              <RequireAuth>
+                <MinhaConta />
+              </RequireAuth>
+            }
+          />
+
+          {/* Admin */}
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <Suspense fallback={<RouteLoading />}>
+                  <AdminLayout />
+                </Suspense>
+              </RequireAdmin>
+            }
+          >
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="pedidos" element={<AdminOrdersPage />} />
+            <Route path="produtos" element={<AdminProductsPage />} />
+            <Route path="produtos/novo" element={<AdminProductsPage />} />
+            <Route path="produtos/:id/editar" element={<AdminProductsPage />} />
+            <Route path="clientes" element={<AdminCustomersPage />} />
+            <Route path="categorias" element={<AdminCategoriesPage />} />
+            <Route path="clubes" element={<AdminClubsPage />} />
+            <Route path="selecoes" element={<AdminClubsPage />} />
+            <Route path="estoque" element={<AdminStockPage />} />
+            <Route path="cupons" element={<AdminCouponsPage />} />
+            <Route path="banners" element={<AdminBannersPage />} />
+            <Route path="avaliacoes" element={<AdminReviewsPage />} />
+            <Route path="newsletter" element={<AdminNewsletterPage />} />
+            <Route path="importacao" element={<AdminImportPage />} />
+            <Route path="fretes" element={<AdminShippingPage />} />
+            <Route path="pagamentos" element={<AdminPaymentsPage />} />
+            <Route path="configuracoes" element={<AdminSettingsPage />} />
+            <Route path="logs" element={<AdminLogsPage />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </>
+  );
+}
+
+// ── Render ──────────────────────────────────────────────────────────────
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RootErrorBoundary>
@@ -190,146 +344,18 @@ createRoot(document.getElementById("root")!).render(
         <VlyToolbar />
       </ToolbarErrorBoundary>
       <SupabaseAuthProvider>
-      <ConvexAuthProvider client={convex}>
-        <BrowserRouter>
-          <RouteSyncer />
-          <Suspense fallback={<RouteLoading />}>
-            <Routes>
-              {/* Public routes with layout */}
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/todos-os-produtos" element={<Catalog />} />
-                <Route path="/busca" element={<Catalog />} />
-                <Route path="/lancamentos" element={<Catalog />} />
-                <Route path="/promocoes" element={<Catalog />} />
-                <Route path="/mais-vendidos" element={<Catalog />} />
-                <Route path="/clubes-do-brasil" element={<Catalog />} />
-                <Route path="/clubes-do-brasil/:club" element={<Catalog />} />
-                <Route path="/clubes-do-mundo" element={<Catalog />} />
-                <Route path="/clubes-do-mundo/:club" element={<Catalog />} />
-                <Route path="/selecoes" element={<Catalog />} />
-                <Route path="/selecoes/:team" element={<Catalog />} />
-                <Route path="/categoria/:slug" element={<Catalog />} />
-                <Route path="/produto/:slug" element={<ProductDetail />} />
-                <Route path="/entrar" element={<Login />} />
-                <Route path="/criar-conta" element={<CriarConta />} />
-                <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-                <Route path="/redefinir-senha" element={<RedefinirSenha />} />
-                <Route path="/confirmar-email" element={<ConfirmarEmail />} />
-                <Route path="/auth/callback" element={<AuthCallback />} />
-                <Route path="/carrinho" element={<Carrinho />} />
-                <Route path="/favoritos" element={<Favorites />} />
-                <Route path="/rastreamento" element={<Tracking />} />
-                
-                {/* Static pages */}
-                <Route path="/sobre" element={<SobrePage />} />
-                <Route path="/contato" element={<ContatoPage />} />
-                <Route path="/faq" element={<FAQPage />} />
-                <Route path="/guia-de-tamanhos" element={<GuiaTamanhosPage />} />
-                <Route path="/privacidade" element={<PolicyPlaceholder title="Política de Privacidade" />} />
-                <Route path="/termos" element={<PolicyPlaceholder title="Termos de Uso" />} />
-                <Route path="/trocas-devolucoes" element={<PolicyPlaceholder title="Política de Trocas e Devoluções" />} />
-                <Route path="/politica-de-envio" element={<PolicyPlaceholder title="Política de Envio" />} />
-                <Route path="/cookies" element={<PolicyPlaceholder title="Política de Cookies" />} />
-              </Route>
-
-              {/* Auth */}
-              <Route
-                path="/auth"
-                element={<AuthPage redirectAfterAuth="/" />}
-              />
-
-              {/* Checkout - no header/footer */}
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/pedido/:orderNumber" element={<OrderConfirmation />} />
-
-              {/* Authenticated routes */}
-              <Route
-                path="/minha-conta"
-                element={
-                  <RequireAuth>
-                    <MinhaConta />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/minha-conta/dados"
-                element={
-                  <RequireAuth>
-                    <MinhaConta />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/minha-conta/pedidos"
-                element={
-                  <RequireAuth>
-                    <MeusPedidos />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/minha-conta/enderecos"
-                element={
-                  <RequireAuth>
-                    <MinhaContaEnderecos />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/minha-conta/cupons"
-                element={
-                  <RequireAuth>
-                    <MinhaConta />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/minha-conta/alterar-senha"
-                element={
-                  <RequireAuth>
-                    <MinhaConta />
-                  </RequireAuth>
-                }
-              />
-
-              {/* Admin */}
-              <Route
-                path="/admin"
-                element={
-                  <RequireAdmin>
-                    <Suspense fallback={<RouteLoading />}>
-                      <AdminLayout />
-                    </Suspense>
-                  </RequireAdmin>
-                }
-              >
-                <Route index element={<AdminDashboardPage />} />
-                <Route path="pedidos" element={<AdminOrdersPage />} />
-                <Route path="produtos" element={<AdminProductsPage />} />
-                <Route path="produtos/novo" element={<AdminProductsPage />} />
-                <Route path="produtos/:id/editar" element={<AdminProductsPage />} />
-                <Route path="clientes" element={<AdminCustomersPage />} />
-                <Route path="categorias" element={<AdminCategoriesPage />} />
-                <Route path="clubes" element={<AdminClubsPage />} />
-                <Route path="selecoes" element={<AdminClubsPage />} />
-                <Route path="estoque" element={<AdminStockPage />} />
-                <Route path="cupons" element={<AdminCouponsPage />} />
-                <Route path="banners" element={<AdminBannersPage />} />
-                <Route path="avaliacoes" element={<AdminReviewsPage />} />
-                <Route path="newsletter" element={<AdminNewsletterPage />} />
-                <Route path="importacao" element={<AdminImportPage />} />
-                <Route path="fretes" element={<AdminShippingPage />} />
-                <Route path="pagamentos" element={<AdminPaymentsPage />} />
-                <Route path="configuracoes" element={<AdminSettingsPage />} />
-                <Route path="logs" element={<AdminLogsPage />} />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        <Toaster />        </ConvexAuthProvider>
+        {convex ? (
+          <ConvexAuthProvider client={convex}>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ConvexAuthProvider>
+        ) : (
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        )}
+        <Toaster />
       </SupabaseAuthProvider>
     </RootErrorBoundary>
   </StrictMode>,
