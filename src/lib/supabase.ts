@@ -4,8 +4,30 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 // Sanitize the Supabase URL: trim whitespace and remove trailing slashes
 // that can cause "Invalid path specified in request URL" errors.
 const rawUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseUrl = rawUrl ? rawUrl.trim().replace(/\/+$/, "") : "";
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+function sanitizeUrl(url: string): string {
+  let cleaned = url.trim();
+  // Remove trailing slashes
+  cleaned = cleaned.replace(/\/+$/, "");
+  // Remove any trailing path segments like /auth/v1, /rest/v1, etc.
+  cleaned = cleaned.replace(/\/(auth|rest|realtime|storage|functions|graphql)\/.*$/, "");
+  return cleaned;
+}
+
+const supabaseUrl = rawUrl ? sanitizeUrl(rawUrl) : "";
+const supabaseAnonKey = rawKey ? rawKey.trim() : "";
+
+// Validate URL format
+function isValidSupabaseUrl(url: string): boolean {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" && parsed.hostname.includes("supabase");
+  } catch {
+    return false;
+  }
+}
 
 // Create a mock Supabase client that silently no-ops when not configured.
 // This prevents the real createClient("", "") from throwing during module
@@ -88,22 +110,38 @@ function createMockClient(): SupabaseClient {
 
 let supabase: SupabaseClient;
 
+if (typeof window !== "undefined") {
+  // Log diagnostics to help debug configuration issues
+  console.log("[Supabase] Raw URL:", rawUrl ? `${rawUrl.substring(0, 30)}...` : "(not set)");
+  console.log("[Supabase] Sanitized URL:", supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : "(empty)");
+  console.log("[Supabase] Key present:", !!supabaseAnonKey);
+}
+
 if (supabaseUrl && supabaseAnonKey) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-  });
-  if (typeof window !== "undefined") {
-    console.log("[Supabase] Client configured successfully.");
+  if (isValidSupabaseUrl(supabaseUrl)) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    });
+    if (typeof window !== "undefined") {
+      console.log("[Supabase] Client configured successfully.");
+    }
+  } else {
+    console.error(
+      "[Supabase] ⚠️ INVALID URL FORMAT:", supabaseUrl,
+      "\nThe URL must be in format: https://<project-ref>.supabase.co",
+      "\nCheck VITE_SUPABASE_URL in your environment variables."
+    );
+    supabase = createMockClient();
   }
 } else {
   if (typeof window !== "undefined") {
     console.error(
-      "[Supabase] ⚠️ NOT CONFIGURED — VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY are missing! " +
-      "Auth, database, and storage will NOT work. " +
+      "[Supabase] ⚠️ NOT CONFIGURED — VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY are missing! ",
+      "Auth, database, and storage will NOT work. ",
       "Add these variables in your hosting platform (Netlify → Site configuration → Environment variables)."
     );
   }
