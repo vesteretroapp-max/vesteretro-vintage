@@ -1,7 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+// Sanitize the Supabase URL: trim whitespace and remove trailing slashes
+// that can cause "Invalid path specified in request URL" errors.
+const rawUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseUrl = rawUrl ? rawUrl.trim().replace(/\/+$/, "") : "";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Create a mock Supabase client that silently no-ops when not configured.
