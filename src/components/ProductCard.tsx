@@ -45,19 +45,19 @@ export function ProductCard({ product }: ProductCardProps) {
     window.dispatchEvent(new Event("cart-updated"));
   };
 
-  // Determine badge type
+  // Premium metallic badge
   const getBadge = () => {
     if (discount > 0) {
-      return { text: `-${discount}%`, color: "bg-red-500 text-white" };
+      return { text: `-${discount}%`, className: "bg-[var(--gold)] text-background" };
     }
     if (product.isNew) {
-      return { text: "NOVA", color: "bg-[var(--gold)] text-background" };
+      return { text: "NOVA", className: "bg-[var(--gold)] text-background" };
     }
     if (product.isRetro) {
-      return { text: "RETRÔ", color: "bg-background/80 text-[var(--gold)] border border-[var(--border-gold)]" };
+      return { text: "RETRÔ", className: "bg-background/90 text-[var(--gold)] border border-[var(--gold)]/30" };
     }
     if (product.isBestSeller) {
-      return { text: "LIMITADA", color: "bg-[var(--gold-dark)] text-white" };
+      return { text: "LIMITADA", className: "bg-[var(--gold-dark)] text-white" };
     }
     return null;
   };
@@ -66,47 +66,25 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className="card-premium group relative flex flex-col overflow-hidden rounded-xl"
+      className="group relative flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Badge */}
-      {badge && (
-        <span
-          className={`absolute left-3 top-3 z-10 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm ${badge.color}`}
-        >
-          {badge.text}
-        </span>
-      )}
+      {/* Image container — consistent framing */}
+      <Link to={`/produto/${product.slug}`} className="block">
+        <div className="relative aspect-[3/4] overflow-hidden bg-[#0e1010]">
+          {/* Consistent dark background for all product images */}
 
-      {/* Favorite button */}
-      <button
-        aria-label="Favoritar"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsFavorited(!isFavorited);
-        }}
-        className="absolute right-3 top-3 z-10 rounded-full bg-background/70 p-2.5 text-muted-foreground backdrop-blur-sm transition-all duration-300 hover:text-[var(--gold)] hover:bg-background/90 hover:scale-110"
-      >
-        <Heart
-          className={`h-4 w-4 transition-all duration-300 ${
-            isFavorited ? "fill-[var(--gold)] text-[var(--gold)] scale-110" : ""
-          }`}
-        />
-      </button>
-
-      {/* Image */}
-      <Link to={`/produto/${product.slug}`}>
-        <div className="relative aspect-[4/5] overflow-hidden bg-surface-2">
+          {/* Primary Image */}
           {!imgError ? (
             <>
-              {/* Primary Image */}
               <img
                 src={product.images[0]}
                 alt={product.name}
-                className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
-                  isHovered && product.images[1] ? "opacity-0 scale-105" : "scale-100"
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-[600ms] ease-out ${
+                  isHovered && product.images[1]
+                    ? "opacity-0 scale-[1.03]"
+                    : "scale-100"
                 }`}
                 loading="lazy"
                 onError={() => setImgError(true)}
@@ -116,56 +94,62 @@ export function ProductCard({ product }: ProductCardProps) {
                 <img
                   src={product.images[1]}
                   alt={product.name}
-                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
-                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-[600ms] ease-out ${
+                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"
                   }`}
                   loading="lazy"
                 />
               )}
             </>
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-2 via-surface to-background p-6">
-              <svg
-                viewBox="0 0 120 130"
-                className="h-28 w-28 text-[var(--gold)]/40"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path
-                  d="M20 20 L45 10 Q60 25 75 10 L100 20 L110 45 L90 55 L90 120 L30 120 L30 55 L10 45 Z"
-                  fill="currentColor"
-                  fillOpacity="0.08"
-                />
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-[#0e1010] p-6">
+              <svg viewBox="0 0 120 130" className="h-24 w-24 text-[var(--gold)]/20" fill="none" stroke="currentColor" strokeWidth="1">
+                <path d="M20 20 L45 10 Q60 25 75 10 L100 20 L110 45 L90 55 L90 120 L30 120 L30 55 L10 45 Z" fill="currentColor" fillOpacity="0.05" />
               </svg>
               <div className="text-center">
-                <p className="font-display text-lg text-foreground/70">
-                  {product.club}
-                </p>
-                <p className="text-xs uppercase tracking-[0.2em] text-[var(--gold)]/70">
-                  {product.year}
-                </p>
+                <p className="font-display text-base text-foreground/50">{product.club}</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--gold)]/50 mt-1">{product.year}</p>
               </div>
             </div>
           )}
 
-          {/* Quick Actions Overlay */}
+          {/* Badge — top left */}
+          {badge && (
+            <span className={`absolute left-4 top-4 z-10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] ${badge.className}`}>
+              {badge.text}
+            </span>
+          )}
+
+          {/* Favorite — top right */}
+          <button
+            aria-label="Favoritar"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsFavorited(!isFavorited);
+            }}
+            className="absolute right-4 top-4 z-10 p-2 text-muted-foreground/40 transition-all duration-300 hover:text-[var(--gold)]"
+          >
+            <Heart className={`h-4 w-4 ${isFavorited ? "fill-[var(--gold)] text-[var(--gold)]" : ""}`} />
+          </button>
+
+          {/* Quick actions — bottom */}
           <div
-            className={`absolute inset-x-0 bottom-0 p-3 transition-all duration-300 ${
-              isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-500 ${
+              isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
             <div className="flex gap-2">
               <Link
                 to={`/produto/${product.slug}`}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-background/90 backdrop-blur-sm py-2.5 text-xs font-semibold text-foreground transition-colors hover:bg-[var(--gold)] hover:text-background"
+                className="flex-1 flex items-center justify-center gap-2 bg-background/80 backdrop-blur-md py-2.5 text-[10px] uppercase tracking-[0.15em] text-foreground transition-colors duration-300 hover:bg-[var(--gold)] hover:text-background"
               >
                 <Eye className="h-3.5 w-3.5" />
-                <span>Visualizar</span>
+                Visualizar
               </Link>
               <button
                 onClick={handleAddToCart}
-                className="flex items-center justify-center rounded-lg bg-[var(--gold)] py-2.5 px-4 text-background transition-all hover:bg-[var(--gold-light)] hover:shadow-[0_0_20px_rgba(214,166,50,0.3)]"
+                className="flex items-center justify-center bg-[var(--gold)] py-2.5 px-4 text-background transition-all duration-300 hover:bg-[var(--gold-light)]"
                 aria-label="Adicionar ao carrinho"
               >
                 <ShoppingBag className="h-4 w-4" />
@@ -175,25 +159,23 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
 
-      {/* Info */}
-      <Link to={`/produto/${product.slug}`} className="flex flex-1 flex-col p-4">
-        {/* Club & Year */}
-        <div className="flex items-center justify-between">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+      {/* Info — refined typography */}
+      <Link to={`/produto/${product.slug}`} className="block mt-5">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
             {product.club}
           </p>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[10px] text-muted-foreground/50">
             {product.year}
           </p>
         </div>
 
-        {/* Name */}
-        <h3 className="mt-1.5 line-clamp-2 font-sans text-sm font-medium text-foreground leading-snug">
+        <h3 className="font-display text-base text-foreground/90 leading-snug line-clamp-1">
           {product.name}
         </h3>
 
         {/* Rating */}
-        <div className="mt-2 flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 mt-2.5">
           <div className="flex gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
@@ -201,43 +183,43 @@ export function ProductCard({ product }: ProductCardProps) {
                 className={`h-3 w-3 ${
                   star <= Math.round(product.rating)
                     ? "fill-[var(--gold)] text-[var(--gold)]"
-                    : "fill-muted-foreground/20 text-muted-foreground/20"
+                    : "fill-muted-foreground/10 text-muted-foreground/10"
                 }`}
               />
             ))}
           </div>
-          <span className="text-[10px] text-muted-foreground">
+          <span className="text-[10px] text-muted-foreground/40">
             ({product.reviewCount})
           </span>
         </div>
 
         {/* Price */}
-        <div className="mt-3">
+        <div className="mt-3 flex items-baseline gap-2">
           {product.promotionalPrice ? (
-            <div>
-              <p className="text-xs text-muted-foreground line-through">
+            <>
+              <span className="text-xs text-muted-foreground/40 line-through">
                 R$ {product.price.toFixed(2)}
-              </p>
-              <p className="text-lg font-bold text-[var(--gold)]">
+              </span>
+              <span className="text-base font-semibold text-[var(--gold)]">
                 R$ {product.promotionalPrice.toFixed(2)}
-              </p>
-            </div>
+              </span>
+            </>
           ) : (
-            <p className="text-lg font-bold text-[var(--gold)]">
+            <span className="text-base font-semibold text-[var(--gold)]">
               R$ {product.price.toFixed(2)}
-            </p>
+            </span>
           )}
-          <p className="text-[11px] text-muted-foreground">
-            ou 12x de R$ {installmentPrice.toFixed(2)} sem juros
-          </p>
         </div>
+        <p className="text-[10px] text-muted-foreground/40 mt-1">
+          ou 12x de R$ {installmentPrice.toFixed(2)}
+        </p>
       </Link>
 
-      {/* Buy Button */}
-      <div className="px-4 pb-4">
+      {/* Add to cart button */}
+      <div className="mt-4">
         <button
           onClick={handleAddToCart}
-          className="w-full rounded-lg bg-[var(--gold)] py-3 text-sm font-bold uppercase tracking-[0.15em] text-background transition-all duration-300 hover:bg-[var(--gold-light)] hover:shadow-[0_0_25px_rgba(214,166,50,0.25)] active:scale-[0.98]"
+          className="w-full py-3 border border-border/30 text-[10px] uppercase tracking-[0.2em] text-foreground/70 transition-all duration-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)] active:scale-[0.99]"
         >
           Adicionar ao Carrinho
         </button>

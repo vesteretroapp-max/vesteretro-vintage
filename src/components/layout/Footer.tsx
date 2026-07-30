@@ -4,291 +4,119 @@ import {
   Facebook,
   Youtube,
   MessageCircle,
-  CreditCard,
-  Truck,
-  ShieldCheck,
-  Mail,
-  Phone,
-  MapPin,
 } from "lucide-react";
 
 const LOGO_URL =
   "https://i.postimg.cc/1PpMzQ81/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
 
-const paymentMethods = [
-  { name: "Visa", icon: "💳" },
-  { name: "Mastercard", icon: "💳" },
-  { name: "PIX", icon: "⚡" },
-  { name: "Boleto", icon: "📄" },
-  { name: "Elo", icon: "💳" },
-  { name: "Amex", icon: "💳" },
-];
-
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border bg-surface">
-      {/* Newsletter Strip */}
-      <div className="border-b border-border">
-        <div className="container-vr py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold)] font-semibold">
-                Newsletter
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Receba lançamentos e promoções exclusivas
-              </p>
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Obrigado por se inscrever!");
-              }}
-              className="flex w-full md:w-auto gap-3"
-            >
-              <input
-                required
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 md:w-72 rounded-lg border border-border bg-background px-4 py-3 text-sm outline-none focus:border-[var(--gold)] transition-colors"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-[var(--gold)] px-6 py-3 text-sm font-bold uppercase tracking-wider text-background hover:bg-[var(--gold-light)] transition-colors"
-              >
-                Inscrever
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+    <footer className="border-t border-border/30 bg-background">
+      <div className="container-vr">
+        {/* Top section — Brand + columns */}
+        <div className="grid gap-16 py-20 md:grid-cols-2 lg:grid-cols-4 lg:gap-10">
 
-      {/* Main Footer */}
-      <div className="container-vr grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-5">
-        {/* Brand Column */}
-        <div className="lg:col-span-2">
-          <Link to="/">
-            <div className="logo-container">
-              <img
-                src={LOGO_URL}
-                alt="VesteRetro — Vista a História"
-                className="logo-img"
-                loading="lazy"
-              />
-            </div>
-          </Link>
-          <p className="mt-4 font-display text-lg italic text-[var(--gold)]">
-            Vista a História.
-          </p>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Mais que camisas, vestimos histórias. Reviva os maiores momentos do
-            futebol com estilo e autenticidade.
-          </p>
-
-          {/* Social Media */}
-          <div className="mt-6 flex gap-3">
-            {[
-              { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-              { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-              { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
-              {
-                icon: MessageCircle,
-                href: "https://wa.me/5511987516823?text=Ol%C3%A1!%20Estou%20visitando%20a%20loja%20VesteRetro.",
-                label: "WhatsApp",
-              },
-            ].map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition-all hover:border-[var(--gold)] hover:text-[var(--gold)] hover:bg-[var(--gold)]/5"
-              >
-                <social.icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
-
-          {/* WhatsApp CTA */}
-          <a
-            href="https://wa.me/5511987516823?text=Ol%C3%A1!%20Gostaria%20de%20atendimento."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-green-600/10 border border-green-600/30 px-4 py-2.5 text-sm text-green-500 hover:bg-green-600/20 transition-colors"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Atendimento via WhatsApp
-          </a>
-        </div>
-
-        {/* Institucional */}
-        <div>
-          <h4 className="mb-5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-            Institucional
-          </h4>
-          <ul className="space-y-3 text-sm text-muted-foreground">
-            <li>
-              <Link to="/sobre" className="transition hover:text-[var(--gold)]">
-                Sobre nós
-              </Link>
-            </li>
-            <li>
-              <Link to="/contato" className="transition hover:text-[var(--gold)]">
-                Contato
-              </Link>
-            </li>
-            <li>
-              <Link to="/faq" className="transition hover:text-[var(--gold)]">
-                Perguntas frequentes
-              </Link>
-            </li>
-            <li>
-              <Link to="/blog" className="transition hover:text-[var(--gold)]">
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link to="/trabalhe-conosco" className="transition hover:text-[var(--gold)]">
-                Trabalhe conosco
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Ajuda */}
-        <div>
-          <h4 className="mb-5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-            Ajuda
-          </h4>
-          <ul className="space-y-3 text-sm text-muted-foreground">
-            <li>
-              <Link to="/guia-de-tamanhos" className="transition hover:text-[var(--gold)]">
-                Guia de tamanhos
-              </Link>
-            </li>
-            <li>
-              <Link to="/rastreamento" className="transition hover:text-[var(--gold)]">
-                Rastrear pedido
-              </Link>
-            </li>
-            <li>
-              <Link to="/trocas" className="transition hover:text-[var(--gold)]">
-                Trocas e devoluções
-              </Link>
-            </li>
-            <li>
-              <Link to="/politica-de-envio" className="transition hover:text-[var(--gold)]">
-                Política de envio
-              </Link>
-            </li>
-            <li>
-              <Link to="/termos" className="transition hover:text-[var(--gold)]">
-                Termos de uso
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Contato */}
-        <div>
-          <h4 className="mb-5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-            Contato
-          </h4>
-          <ul className="space-y-4 text-sm text-muted-foreground">
-            <li className="flex items-start gap-3">
-              <MessageCircle className="h-4 w-4 mt-0.5 text-[var(--gold)]" />
-              <div>
-                <p className="text-foreground">+55 11 98751-6823</p>
-                <p className="text-xs">WhatsApp</p>
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <Link to="/" className="inline-block">
+              <div className="logo-container">
+                <img
+                  src={LOGO_URL}
+                  alt="VesteRetro"
+                  className="logo-img"
+                  loading="lazy"
+                />
               </div>
-            </li>
-            <li className="flex items-start gap-3">
-              <Mail className="h-4 w-4 mt-0.5 text-[var(--gold)]" />
-              <div>
-                <p className="text-foreground">contato@vesteretro.com.br</p>
-                <p className="text-xs">E-mail</p>
-              </div>
-            </li>
-            <li className="flex items-start gap-3">
-              <Phone className="h-4 w-4 mt-0.5 text-[var(--gold)]" />
-              <div>
-                <p className="text-foreground">Seg. a Sex., 9h às 18h</p>
-                <p className="text-xs">Horário de atendimento</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+            </Link>
+            <p className="mt-6 font-display text-base italic text-[var(--gold)]/80">
+              Vista a História.
+            </p>
+            <p className="mt-4 max-w-[260px] text-xs leading-relaxed text-muted-foreground/50">
+              Mais que camisas, vestimos histórias. Reviva os maiores momentos do futebol.
+            </p>
 
-      {/* Payment Methods */}
-      <div className="border-t border-border">
-        <div className="container-vr py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-[var(--gold)]" />
-              <span className="text-sm font-medium text-foreground">
-                Formas de pagamento
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              {paymentMethods.map((method) => (
-                <div
-                  key={method.name}
-                  className="flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-xs text-muted-foreground"
+            {/* Social */}
+            <div className="mt-8 flex gap-4">
+              {[
+                { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+                { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
+                { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+                {
+                  icon: MessageCircle,
+                  href: "https://wa.me/5511987516823",
+                  label: "WhatsApp",
+                },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="flex h-9 w-9 items-center justify-center border border-border/30 text-muted-foreground/40 transition-all duration-300 hover:border-[var(--gold)]/30 hover:text-[var(--gold)]"
                 >
-                  <span>{method.icon}</span>
-                  <span>{method.name}</span>
-                </div>
+                  <social.icon className="h-3.5 w-3.5" />
+                </a>
               ))}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Shipping & Security */}
-      <div className="border-t border-border">
-        <div className="container-vr py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Truck className="h-5 w-5 text-[var(--gold)]" />
-                <span>Envio para todo o Brasil</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-5 w-5 text-[var(--gold)]" />
-                <span>Compra 100% segura</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2">
-                <ShieldCheck className="h-4 w-4 text-green-500" />
-                <span className="text-xs text-muted-foreground">SSL Seguro</span>
-              </div>
-              <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2">
-                <ShieldCheck className="h-4 w-4 text-green-500" />
-                <span className="text-xs text-muted-foreground">Site Verificado</span>
-              </div>
-            </div>
+          {/* Colunas */}
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-[var(--gold)]/60 mb-6">
+              Institucional
+            </h4>
+            <ul className="space-y-3.5 text-xs text-muted-foreground/50">
+              <li><Link to="/sobre" className="hover:text-[var(--gold)] transition-colors duration-300">Sobre nós</Link></li>
+              <li><Link to="/contato" className="hover:text-[var(--gold)] transition-colors duration-300">Contato</Link></li>
+              <li><Link to="/faq" className="hover:text-[var(--gold)] transition-colors duration-300">Perguntas frequentes</Link></li>
+              <li><Link to="/blog" className="hover:text-[var(--gold)] transition-colors duration-300">Blog</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-[var(--gold)]/60 mb-6">
+              Ajuda
+            </h4>
+            <ul className="space-y-3.5 text-xs text-muted-foreground/50">
+              <li><Link to="/guia-de-tamanhos" className="hover:text-[var(--gold)] transition-colors duration-300">Guia de tamanhos</Link></li>
+              <li><Link to="/rastreamento" className="hover:text-[var(--gold)] transition-colors duration-300">Rastrear pedido</Link></li>
+              <li><Link to="/trocas" className="hover:text-[var(--gold)] transition-colors duration-300">Trocas e devoluções</Link></li>
+              <li><Link to="/politica-de-envio" className="hover:text-[var(--gold)] transition-colors duration-300">Política de envio</Link></li>
+              <li><Link to="/termos" className="hover:text-[var(--gold)] transition-colors duration-300">Termos de uso</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-[var(--gold)]/60 mb-6">
+              Contato
+            </h4>
+            <ul className="space-y-4 text-xs text-muted-foreground/50">
+              <li className="flex items-start gap-2.5">
+                <MessageCircle className="h-3.5 w-3.5 mt-0.5 text-[var(--gold)]/40" />
+                <div>
+                  <p className="text-foreground/70">+55 11 98751-6823</p>
+                  <p className="text-[10px] mt-0.5">WhatsApp</p>
+                </div>
+              </li>
+              <li>
+                <p className="text-foreground/70">contato@vesteretro.com.br</p>
+                <p className="text-[10px] mt-0.5">Seg. a Sex., 9h às 18h</p>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-border/60">
-        <div className="container-vr flex flex-col items-start gap-4 py-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-4">
-            <Link to="/privacidade" className="transition hover:text-[var(--gold)]">
-              Privacidade
-            </Link>
-            <Link to="/termos" className="transition hover:text-[var(--gold)]">
-              Termos
-            </Link>
-            <Link to="/cookies" className="transition hover:text-[var(--gold)]">
-              Cookies
-            </Link>
+        {/* Bottom bar — ultra minimal */}
+        <div className="border-t border-border/20 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-6 text-[10px] text-muted-foreground/30">
+            <Link to="/privacidade" className="hover:text-[var(--gold)] transition-colors duration-300">Privacidade</Link>
+            <Link to="/termos" className="hover:text-[var(--gold)] transition-colors duration-300">Termos</Link>
+            <Link to="/cookies" className="hover:text-[var(--gold)] transition-colors duration-300">Cookies</Link>
           </div>
-          <p>© 2026 VesteRetro. Todos os direitos reservados.</p>
+          <p className="text-[10px] text-muted-foreground/30">
+            © 2026 VesteRetro. Todos os direitos reservados.
+          </p>
         </div>
       </div>
     </footer>

@@ -3,78 +3,74 @@ import { Star, BadgeCheck } from "lucide-react";
 interface Review {
   id: number;
   name: string;
+  city: string;
+  state: string;
   avatar: string;
   rating: number;
   text: string;
-  product: string;
   verified: boolean;
-  date: string;
-  hasImage?: boolean;
 }
 
 const reviews: Review[] = [
   {
     id: 1,
     name: "Rafael M.",
+    city: "São Paulo",
+    state: "SP",
     avatar: "https://picsum.photos/id/1012/100/100",
     rating: 5,
-    text: "A qualidade da camisa é impressionante. Detalhes perfeitos, tecido premium. Parece que estou usando a original de 1981. Recomendo demais!",
-    product: "Flamengo 1981 — Home",
+    text: "A qualidade é impressionante. Detalhes perfeitos, tecido premium. Parece que estou usando a original. Recomendo demais.",
     verified: true,
-    date: "Há 2 dias",
-    hasImage: true,
   },
   {
     id: 2,
     name: "Ana P.",
+    city: "Rio de Janeiro",
+    state: "RJ",
     avatar: "https://picsum.photos/id/1025/100/100",
     rating: 5,
-    text: "Presente do meu marido. Ele amou! A embalaçãoo é linda e a camisa ficou ainda melhor do que nas fotos. Virei cliente fiel.",
-    product: "Corinthians Clássico",
+    text: "Presente do meu marido. Ele amou! A embalaçãoo é linda e a camisa ficou ainda melhor do que nas fotos.",
     verified: true,
-    date: "Há 5 dias",
   },
   {
     id: 3,
     name: "Lucas S.",
+    city: "Belo Horizonte",
+    state: "MG",
     avatar: "https://picsum.photos/id/1074/100/100",
     rating: 5,
-    text: "Já comprei 3 camisas e todas são incríveis. O atendimento via WhatsApp é excelente. Chegou antes do prazo. Nota 10!",
-    product: "Manchester United 1999 — Home",
+    text: "Já comprei 3 camisas e todas são incríveis. O atendimento via WhatsApp é excelente. Nota 10.",
     verified: true,
-    date: "Há 1 semana",
-    hasImage: true,
   },
   {
     id: 4,
     name: "Mariana O.",
+    city: "Curitiba",
+    state: "PR",
     avatar: "https://picsum.photos/id/1062/100/100",
-    rating: 4,
-    text: "Camisa linda e de ótima qualidade. Só demorou um pouco para chegar, mas valeu a pena esperar. As costuras são perfeitas.",
-    product: "Real Madrid 2002 — Home",
+    rating: 5,
+    text: "Camisa linda e de ótima qualidade. Valeu cada centavo. As costuras são perfeitas.",
     verified: true,
-    date: "Há 2 semanas",
   },
   {
     id: 5,
     name: "Pedro H.",
+    city: "Porto Alegre",
+    state: "RS",
     avatar: "https://picsum.photos/id/1005/100/100",
     rating: 5,
-    text: "A melhor loja de camisas retrô que já comprei. A attention ao detalhe é incrível. Cada costura, cada badge, tudo perfeito.",
-    product: "Liverpool 1984 — Home",
+    text: "A melhor loja de camisas retrô que já comprei. Atenção ao detalhe é incrível. Tudo perfeito.",
     verified: true,
-    date: "Há 3 semanas",
-    hasImage: true,
   },
   {
     id: 6,
     name: "Juliana R.",
+    city: "Salvador",
+    state: "BA",
     avatar: "https://picsum.photos/id/1027/100/100",
     rating: 5,
-    text: "Surpreendente! A qualidade superou minhas expectativas. A camisa do Vasco ficou idêntica à original. Parabéns pela dedicação!",
-    product: "Vasco 1997 — Home",
+    text: "Surpreendente! A qualidade superou todas as expectativas. Parabéns pela dedicação.",
     verified: true,
-    date: "Há 1 mês",
   },
 ];
 
@@ -84,10 +80,10 @@ function StarRating({ rating }: { rating: number }) {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`h-4 w-4 ${
+          className={`h-3.5 w-3.5 ${
             star <= rating
               ? "fill-[var(--gold)] text-[var(--gold)]"
-              : "fill-muted-foreground/20 text-muted-foreground/20"
+              : "fill-muted-foreground/15 text-muted-foreground/15"
           }`}
         />
       ))}
@@ -97,103 +93,67 @@ function StarRating({ rating }: { rating: number }) {
 
 export function ReviewsSection() {
   return (
-    <section className="relative py-16 md:py-24">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-surface/30" />
-
+    <section className="py-24 md:py-32">
       <div className="container-vr">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)] font-semibold">
-            Avaliações
-          </p>
-          <h2 className="mt-3 font-display text-3xl md:text-4xl">
-            O que nossos clientes dizem
-          </h2>
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <div className="flex gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className="h-5 w-5 fill-[var(--gold)] text-[var(--gold)]"
-                />
-              ))}
-            </div>
-            <span className="text-sm text-muted-foreground">
-              4.9/5 baseado em +500 avaliações
+        {/* Minimal header */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="h-px w-12 bg-[var(--gold)]/40" />
+            <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground/60">
+              Depoimentos
             </span>
+            <div className="h-px w-12 bg-[var(--gold)]/40" />
           </div>
+          <h2 className="font-display text-3xl md:text-4xl">
+            O que dizem sobre nós
+          </h2>
         </div>
 
-        {/* Reviews Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Reviews grid — clean, no photos */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="group relative rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:border-[var(--border-gold)] hover:shadow-xl hover:shadow-[var(--gold)]/5"
+              className="group p-8 border border-border/30 rounded-sm transition-all duration-500 hover:border-[var(--border-gold)]/30"
             >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={review.avatar}
-                    alt={review.name}
-                    className="h-10 w-10 rounded-full object-cover border border-border"
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">
-                      {review.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {review.date}
-                    </p>
-                  </div>
+              {/* Avatar + Name + Location */}
+              <div className="flex items-center gap-4">
+                <img
+                  src={review.avatar}
+                  alt={review.name}
+                  className="h-12 w-12 rounded-full object-cover border border-border/30"
+                />
+                <div>
+                  <p className="text-sm font-medium text-foreground">
+                    {review.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground/50">
+                    {review.city}, {review.state}
+                  </p>
                 </div>
-                {review.verified && (
-                  <div className="flex items-center gap-1 text-[10px] text-[var(--gold)]">
-                    <BadgeCheck className="h-4 w-4" />
-                    <span>Compra verificada</span>
-                  </div>
-                )}
               </div>
 
-              {/* Rating */}
-              <StarRating rating={review.rating} />
+              {/* Stars */}
+              <div className="mt-5">
+                <StarRating rating={review.rating} />
+              </div>
 
-              {/* Review Text */}
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                {review.text}
+              {/* Comment */}
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground/70">
+                "{review.text}"
               </p>
 
-              {/* Product */}
-              <div className="mt-4 pt-4 border-t border-border/50">
-                <p className="text-xs text-muted-foreground">
-                  Produto:{" "}
-                  <span className="text-foreground">{review.product}</span>
-                </p>
-              </div>
-
-              {/* Review Image */}
-              {review.hasImage && (
-                <div className="mt-4 rounded-lg overflow-hidden border border-border/50">
-                  <img
-                    src={`https://picsum.photos/id/${review.id * 50}/400/300`}
-                    alt="Foto do produto"
-                    className="w-full h-32 object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                    loading="lazy"
-                  />
+              {/* Verified badge */}
+              {review.verified && (
+                <div className="mt-5 pt-5 border-t border-border/20 flex items-center gap-1.5">
+                  <BadgeCheck className="h-3.5 w-3.5 text-[var(--gold)]/60" />
+                  <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/40">
+                    Compra verificada
+                  </span>
                 </div>
               )}
             </div>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-10">
-          <p className="text-sm text-muted-foreground">
-            Sua satisfação é nossa prioridade.{" "}
-            <span className="text-[var(--gold)]">+500 clientes satisfeitos</span>
-          </p>
         </div>
       </div>
     </section>

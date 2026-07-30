@@ -1,187 +1,92 @@
 import { Link } from "react-router";
-import { ArrowRight, Play } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    setIsVisible(true);
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  const parallaxOffset = scrollY * 0.15;
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-[85vh] overflow-hidden bg-background"
-    >
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,color-mix(in_oklab,var(--gold)_8%,transparent),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,color-mix(in_oklab,var(--gold)_5%,transparent),transparent_40%)]" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
+    <section className="relative h-screen min-h-[700px] overflow-hidden bg-background">
+      {/* Full-bleed hero image */}
+      <div
+        className="absolute inset-0 -z-10"
+        style={{ transform: `translateY(${scrollY * 0.12}px)` }}
+      >
+        <img
+          src="https://i.postimg.cc/2SnM0q7H/grandes.png"
+          alt=""
+          className="h-full w-full object-cover object-center"
+          loading="eager"
+        />
+        {/* Gradient overlays for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
       </div>
 
-      {/* Floating gold particles */}
-      <div className="absolute inset-0 -z-5 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+      {/* Content */}
+      <div className="relative flex h-full items-center">
+        <div className="container-vr w-full">
           <div
-            key={i}
-            className="absolute rounded-full bg-[var(--gold)]/10 animate-float"
-            style={{
-              width: `${60 + i * 20}px`,
-              height: `${60 + i * 20}px`,
-              left: `${10 + i * 15}%`,
-              top: `${20 + (i % 3) * 25}%`,
-              animationDelay: `${i * 0.8}s`,
-              animationDuration: `${6 + i}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="container-vr grid gap-8 py-12 md:grid-cols-[1fr_1.2fr] md:py-16 lg:py-20 items-center min-h-[85vh]">
-        {/* Left: Text Content */}
-        <div
-          className={`space-y-6 md:space-y-8 transition-all duration-1000 ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-        >
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3">
-            <div className="h-px w-12 bg-[var(--gold)]" />
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--gold)] font-semibold">
-              Coleção Retrô Premium
-            </p>
-          </div>
-
-          {/* Main Title */}
-          <h1 className="font-display text-5xl leading-[1.05] md:text-6xl lg:text-7xl xl:text-8xl">
-            <span className="block text-foreground">Vista a</span>
-            <span className="block text-gradient-gold italic">História.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg lg:text-xl">
-            Camisas atuais e retrô dos maiores clubes do mundo.
-            <span className="block mt-2 text-[var(--gold)]/80">
-              Vestimos memórias que nunca morreram.
-            </span>
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-4 pt-2">
-            <Link
-              to="/todos-os-produtos"
-              className="group relative inline-flex items-center gap-3 rounded-lg bg-[var(--gold)] px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-background transition-all duration-300 hover:bg-[var(--gold-light)] hover:shadow-[0_0_30px_rgba(214,166,50,0.3)]"
-            >
-              Comprar Agora
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/lancamentos"
-              className="group inline-flex items-center gap-3 rounded-lg border border-[var(--border-gold)] px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-foreground transition-all duration-300 hover:border-[var(--gold)] hover:bg-[var(--gold)]/5"
-            >
-              <Play className="h-4 w-4" />
-              Explorar Coleção
-            </Link>
-          </div>
-
-          {/* Trust badges */}
-          <div className="flex items-center gap-6 pt-4 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-[var(--gold)]" />
-              <span>Frete grátis acima de R$ 299</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-[var(--gold)]" />
-              <span>Compra 100% segura</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Hero Image */}
-        <div
-          className={`relative transition-all duration-1000 delay-300 ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-12"
-          }`}
-        >
-          {/* Gold glow behind image */}
-          <div
-            className="absolute -inset-8 -z-10 rounded-full bg-[var(--gold)]/8 blur-[80px]"
-            style={{ transform: `translateY(${-parallaxOffset}px)` }}
-          />
-          <div
-            className="absolute -inset-16 -z-10 rounded-full bg-[var(--gold)]/4 blur-[120px]"
-            style={{ transform: `translateY(${-parallaxOffset * 0.5}px)` }}
-          />
-
-          {/* Image container */}
-          <div
-            className="relative overflow-hidden rounded-2xl border border-[var(--border-gold)]/50 shadow-2xl shadow-[var(--gold)]/10"
-            style={{ transform: `translateY(${parallaxOffset}px)` }}
+            className={`max-w-2xl transition-all duration-1000 ease-out ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-12"
+            }`}
           >
-            <div className="aspect-[4/5] md:aspect-[3/4]">
-              <img
-                src="https://i.postimg.cc/2SnM0q7H/grandes.png"
-                alt="Camisas retrô dos grandes clubes — VesteRetro"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                loading="eager"
-              />
+            {/* Minimal eyebrow */}
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px w-16 bg-[var(--gold)]" />
+              <span className="text-[11px] uppercase tracking-[0.4em] text-[var(--gold)] font-medium">
+                VesteRetro
+              </span>
             </div>
 
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+            {/* Main headline — minimal, impactful */}
+            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.95] tracking-tight">
+              <span className="block text-foreground">Vista a</span>
+              <span className="block text-gradient-gold italic mt-2">História.</span>
+            </h1>
 
-            {/* Floating badge */}
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="flex items-center gap-3 rounded-lg bg-background/80 px-4 py-3 backdrop-blur-md border border-[var(--border-gold)]/30">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="h-8 w-8 rounded-full border-2 border-background bg-[var(--gold)]/20 flex items-center justify-center"
-                    >
-                      <span className="text-[10px] text-[var(--gold)]">
-                        ★
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-xs">
-                  <p className="text-foreground font-medium">
-                    +2.500 camisas vendidas
-                  </p>
-                  <p className="text-muted-foreground">
-                    Avaliação 4.9/5 dos clientes
-                  </p>
-                </div>
-              </div>
+            {/* Subtle subtitle */}
+            <p className="mt-8 max-w-md text-sm md:text-base leading-relaxed text-muted-foreground/80">
+              Camisas retrô dos maiores clubes do mundo.
+            </p>
+
+            {/* Refined CTAs */}
+            <div className="mt-10 flex items-center gap-6">
+              <Link
+                to="/todos-os-produtos"
+                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)] transition-all duration-300"
+              >
+                Explorar coleção
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
+              </Link>
+              <div className="h-4 w-px bg-border" />
+              <Link
+                to="/lancamentos"
+                className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300"
+              >
+                Lançamentos
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Role para baixo
-        </span>
-        <div className="h-8 w-5 rounded-full border border-border flex justify-center pt-1.5">
-          <div className="h-2 w-1 rounded-full bg-[var(--gold)] animate-bounce" />
-        </div>
+      {/* Minimal scroll indicator */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+        <div className="h-12 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/40 to-transparent" />
       </div>
     </section>
   );

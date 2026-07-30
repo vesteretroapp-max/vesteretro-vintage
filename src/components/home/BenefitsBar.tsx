@@ -1,54 +1,30 @@
 import { Truck, ShieldCheck, CreditCard, Star, RefreshCw } from "lucide-react";
 
 const benefits = [
-  {
-    icon: Truck,
-    title: "Frete Grátis",
-    description: "Acima de R$ 299 para todo o Brasil",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Compra Segura",
-    description: "Pagamento 100% protegido",
-  },
-  {
-    icon: CreditCard,
-    title: "Até 10x",
-    description: "Sem juros no cartão de crédito",
-  },
-  {
-    icon: Star,
-    title: "Produtos Premium",
-    description: "Qualidade superior garantida",
-  },
-  {
-    icon: RefreshCw,
-    title: "Troca Fácil",
-    description: "Até 30 dias para trocar",
-  },
+  { icon: Truck, text: "Frete grátis" },
+  { icon: ShieldCheck, text: "Compra segura" },
+  { icon: CreditCard, text: "Até 10x sem juros" },
+  { icon: Star, text: "Qualidade premium" },
+  { icon: RefreshCw, text: "Troca fácil" },
 ];
 
 export function BenefitsBar() {
   return (
-    <section className="relative border-y border-border bg-surface/50 backdrop-blur-sm">
+    <section className="border-y border-border/40 bg-background">
       <div className="container-vr">
-        <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-border/50">
-          {benefits.map((benefit, index) => (
+        <div className="flex items-center justify-center gap-8 md:gap-14 py-8 md:py-10 overflow-x-auto">
+          {benefits.map((benefit, i) => (
             <div
-              key={benefit.title}
-              className="group flex flex-col items-center gap-3 py-6 px-4 text-center transition-all duration-300 hover:bg-[var(--gold)]/5"
+              key={benefit.text}
+              className="flex items-center gap-3 whitespace-nowrap group"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-gold)] bg-[var(--gold)]/5 transition-all duration-300 group-hover:border-[var(--gold)] group-hover:bg-[var(--gold)]/10 group-hover:shadow-[0_0_20px_rgba(214,166,50,0.15)]">
-                <benefit.icon className="h-5 w-5 text-[var(--gold)] transition-transform duration-300 group-hover:scale-110" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  {benefit.title}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {benefit.description}
-                </p>
-              </div>
+              <benefit.icon className="h-4 w-4 text-[var(--gold)]/60 transition-colors duration-300 group-hover:text-[var(--gold)]" />
+              <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-muted-foreground">
+                {benefit.text}
+              </span>
+              {i < benefits.length - 1 && (
+                <span className="ml-6 hidden md:block h-1 w-1 rounded-full bg-border/40" />
+              )}
             </div>
           ))}
         </div>
