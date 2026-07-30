@@ -77,7 +77,7 @@ export function Header() {
       </div>
 
       {/* Main Header */}
-      <div className="container-vr flex items-center justify-between gap-10 py-3 pl-6">
+      <div className="container-vr flex items-center justify-between gap-8 py-4 pl-6">
         {/* Logo */}
         <Link
           to="/"
@@ -95,7 +95,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-8 text-[13px] font-semibold uppercase tracking-[0.14em] lg:flex">
+        <nav className="hidden items-center gap-6 text-[13px] font-semibold uppercase tracking-[0.14em] lg:flex">
           <Link
             to="/"
             className="text-[var(--gold)]"
