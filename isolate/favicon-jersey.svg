@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="jerseyClip">
+      <path d="M156,80 L200,60 L220,72 L256,64 L292,72 L312,60 L356,80 
+               L400,100 L420,180 L380,170 L370,200 L370,420 L142,420 L142,200 L132,170 L92,180 Z"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Background transparent -->
+  
+  <!-- Jersey body - gold base -->
+  <path d="M156,80 L200,60 L220,72 L256,64 L292,72 L312,60 L356,80 
+           L400,100 L420,180 L380,170 L370,200 L370,420 L142,420 L142,200 L132,170 L92,180 Z" 
+        fill="#D6A632"/>
+  
+  <!-- Black stripes -->
+  <rect x="142" y="80" width="34" height="340" fill="#1a1a1a"/>
+  <rect x="210" y="72" width="34" height="348" fill="#1a1a1a"/>
+  <rect x="278" y="72" width="34" height="348" fill="#1a1a1a"/>
+  <rect x="346" y="80" width="24" height="340" fill="#1a1a1a"/>
+  
+  <!-- Collar V-neck -->
+  <path d="M220,72 L256,110 L292,72" fill="none" stroke="#D6A632" stroke-width="6"/>
+  <path d="M222,74 L256,108 L290,74" fill="#0a0a0a"/>
+  
+  <!-- Collar fold left -->
+  <path d="M200,60 L220,72 L210,80 L192,68 Z" fill="#D6A632"/>
+  <!-- Collar fold right -->
+  <path d="M312,60 L292,72 L302,80 L320,68 Z" fill="#D6A632"/>
+  
+  <!-- Sleeve cuffs - left -->
+  <rect x="92" y="165" width="40" height="8" rx="2" fill="#D6A632"/>
+  <!-- Sleeve cuffs - right -->
+  <rect x="380" y="165" width="40" height="8" rx="2" fill="#D6A632"/>
+  
+  <!-- Shoulder lines -->
+  <line x1="156" y1="80" x2="132" y2="170" stroke="#0a0a0a" stroke-width="2"/>
+  <line x1="356" y1="80" x2="380" y2="170" stroke="#0a0a0a" stroke-width="2"/>
+  
+  <!-- Subtle gold outline for definition -->
+  <path d="M156,80 L200,60 L220,72 L256,64 L292,72 L312,60 L356,80 
+           L400,100 L420,180 L380,170 L370,200 L370,420 L142,420 L142,200 L132,170 L92,180 Z" 
+        fill="none" stroke="#D6A632" stroke-width="3"/>
+</svg>
