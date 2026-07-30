@@ -7,6 +7,7 @@ interface ScrollRevealProps {
   direction?: "up" | "down" | "left" | "right" | "none";
   duration?: number;
   once?: boolean;
+  scale?: number;
 }
 
 export function ScrollReveal({
@@ -16,6 +17,7 @@ export function ScrollReveal({
   direction = "up",
   duration = 700,
   once = true,
+  scale = 0.97,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +35,7 @@ export function ScrollReveal({
           setIsVisible(false);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
     );
 
     observer.observe(el);
@@ -41,13 +43,14 @@ export function ScrollReveal({
   }, [delay, once]);
 
   const getTransform = () => {
-    if (isVisible) return "translate(0, 0)";
+    if (isVisible) return `translate(0, 0) scale(1)`;
+    const t = 30;
     switch (direction) {
-      case "up": return "translate(0, 40px)";
-      case "down": return "translate(0, -40px)";
-      case "left": return "translate(40px, 0)";
-      case "right": return "translate(-40px, 0)";
-      case "none": return "none";
+      case "up": return `translate(0, ${t}px) scale(${scale})`;
+      case "down": return `translate(0, -${t}px) scale(${scale})`;
+      case "left": return `translate(${t}px, 0) scale(${scale})`;
+      case "right": return `translate(-${t}px, 0) scale(${scale})`;
+      case "none": return `scale(${scale})`;
     }
   };
 

@@ -40,23 +40,23 @@ export default function Home() {
       {/* 1. HERO — Campaign-style, full-screen (no reveal — always visible) */}
       <HeroSection />
 
-      {/* 2. BENEFITS — Ultra-minimal */}
-      <ScrollReveal delay={100} direction="none">
+      {/* 2. BENEFITS — Ultra-minimal, fade in with no directional movement */}
+      <ScrollReveal delay={0} direction="none" duration={600}>
         <BenefitsBar />
       </ScrollReveal>
 
-      {/* 3. CATEGORIES — Campaign-style cards */}
-      <ScrollReveal delay={100}>
+      {/* 3. CATEGORIES — Campaign-style cards, slide up */}
+      <ScrollReveal delay={150} direction="up" duration={800}>
         <CategoryCards />
       </ScrollReveal>
 
-      {/* 4. CLUB SHIELDS — Elegant carousel */}
-      <ScrollReveal delay={100}>
+      {/* 4. CLUB SHIELDS — Elegant carousel, slide from left */}
+      <ScrollReveal delay={100} direction="left" duration={800}>
         <ClubShieldCarousel />
       </ScrollReveal>
 
-      {/* 5. MAIS VENDIDAS — Featured products */}
-      <ScrollReveal delay={100}>
+      {/* 5. MAIS VENDIDAS — Featured products, slide up */}
+      <ScrollReveal delay={100} direction="up" duration={750}>
         <ProductShowcase
           eyebrow="Mais procurados"
           title="Mais Vendidas"
@@ -66,8 +66,8 @@ export default function Home() {
         />
       </ScrollReveal>
 
-      {/* 6. CLUBES BRASILEIROS */}
-      <ScrollReveal delay={100}>
+      {/* 6. CLUBES BRASILEIROS — slide from right for visual variety */}
+      <ScrollReveal delay={100} direction="right" duration={800}>
         <ProductShowcase
           eyebrow="Clubes do Brasil"
           title="Camisas Brasileiras"
@@ -77,13 +77,13 @@ export default function Home() {
         />
       </ScrollReveal>
 
-      {/* 7. INSTITUTIONAL BANNER — Emotional */}
-      <ScrollReveal delay={200} duration={1000}>
+      {/* 7. INSTITUTIONAL BANNER — Emotional, slow dramatic reveal */}
+      <ScrollReveal delay={200} direction="up" duration={1200} scale={0.95}>
         <PremiumBanner />
       </ScrollReveal>
 
-      {/* 8. CLUBES EUROPEUS */}
-      <ScrollReveal delay={100}>
+      {/* 8. CLUBES EUROPEUS — slide from left */}
+      <ScrollReveal delay={100} direction="left" duration={800}>
         <ProductShowcase
           eyebrow="Clubes da Europa"
           title="Camisas Europeias"
@@ -93,8 +93,8 @@ export default function Home() {
         />
       </ScrollReveal>
 
-      {/* 9. CAMISAS RETRÔ */}
-      <ScrollReveal delay={100}>
+      {/* 9. CAMISAS RETRÔ — slide up with slightly longer duration */}
+      <ScrollReveal delay={120} direction="up" duration={900}>
         <ProductShowcase
           eyebrow="Retrô"
           title="Camisas Retrô"
@@ -104,8 +104,8 @@ export default function Home() {
         />
       </ScrollReveal>
 
-      {/* 10. NOVIDADES */}
-      <ScrollReveal delay={100}>
+      {/* 10. NOVIDADES — slide from right */}
+      <ScrollReveal delay={100} direction="right" duration={800}>
         <ProductShowcase
           eyebrow="Chegaram agora"
           title="Novidades"
@@ -115,13 +115,13 @@ export default function Home() {
         />
       </ScrollReveal>
 
-      {/* 11. DEPOIMENTOS — Clean, no photos */}
-      <ScrollReveal delay={100}>
+      {/* 11. DEPOIMENTOS — Clean, slide up */}
+      <ScrollReveal delay={150} direction="up" duration={750}>
         <ReviewsSection />
       </ScrollReveal>
 
-      {/* 12. NEWSLETTER — Minimalist */}
-      <ScrollReveal delay={100}>
+      {/* 12. NEWSLETTER — Minimalist, fade in gently */}
+      <ScrollReveal delay={100} direction="up" duration={650}>
         <NewsletterSection />
       </ScrollReveal>
     </div>
