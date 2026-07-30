@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const JERSEY_IMAGE = "https://i.postimg.cc/MZmW57Kj/Chat-GPT-Image-30-de-jul-de-2026-12-33-30.png";
+const JERSEY_IMAGE = "https://i.postimg.cc/zB1ybq0H/milan.png";
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
