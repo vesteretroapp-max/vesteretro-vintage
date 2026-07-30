@@ -215,8 +215,8 @@ html {
 
 /* ======== LOGO CONTAINER ======== */
 .logo-container {
-  width: 180px;
-  height: 60px;
+  width: 280px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -227,21 +227,24 @@ html {
 .logo-container .logo-img {
   width: 100%;
   height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: left center;
   display: block;
+  transform: none;
 }
 
 @media (max-width: 1024px) {
   .logo-container {
-    width: 160px;
-    height: 54px;
+    width: 230px;
+    height: 74px;
   }
 }
 
 @media (max-width: 640px) {
   .logo-container {
-    width: 135px;
-    height: 46px;
+    width: 180px;
+    height: 58px;
   }
 }
