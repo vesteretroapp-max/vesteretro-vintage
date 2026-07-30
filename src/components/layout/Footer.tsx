@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const LOGO_URL =
-  "https://i.postimg.cc/1PpMzQ81/Chat-GPT-Image-27-de-jul-de-2026-16-41-41.png";
+  "https://i.postimg.cc/28gXBJRt/vesteretro-logo.png";
 
 export function Footer() {
   return (
