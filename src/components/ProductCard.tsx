@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Eye, Star } from "lucide-react";
 import type { Product } from "@/data/products";
 
 interface ProductCardProps {
@@ -10,6 +10,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const discount = product.promotionalPrice
     ? Math.round(
@@ -44,22 +45,37 @@ export function ProductCard({ product }: ProductCardProps) {
     window.dispatchEvent(new Event("cart-updated"));
   };
 
+  // Determine badge type
+  const getBadge = () => {
+    if (discount > 0) {
+      return { text: `-${discount}%`, color: "bg-red-500 text-white" };
+    }
+    if (product.isNew) {
+      return { text: "NOVA", color: "bg-[var(--gold)] text-background" };
+    }
+    if (product.isRetro) {
+      return { text: "RETRÔ", color: "bg-background/80 text-[var(--gold)] border border-[var(--border-gold)]" };
+    }
+    if (product.isBestSeller) {
+      return { text: "LIMITADA", color: "bg-[var(--gold-dark)] text-white" };
+    }
+    return null;
+  };
+
+  const badge = getBadge();
+
   return (
-    <div className="card-premium group relative flex flex-col overflow-hidden rounded-lg">
-      {/* Badges */}
-      {product.isBestSeller && (
-        <span className="absolute left-3 top-3 z-10 rounded-full border border-[var(--gold)]/50 bg-background/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--gold)] backdrop-blur">
-          Mais vendido
-        </span>
-      )}
-      {discount > 0 && (
-        <span className="absolute left-3 top-3 z-10 rounded-full border border-red-500/50 bg-red-500/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-white backdrop-blur">
-          -{discount}%
-        </span>
-      )}
-      {product.isNew && !product.isBestSeller && (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-[var(--gold)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-background">
-          Novo
+    <div
+      className="card-premium group relative flex flex-col overflow-hidden rounded-xl"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Badge */}
+      {badge && (
+        <span
+          className={`absolute left-3 top-3 z-10 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm ${badge.color}`}
+        >
+          {badge.text}
         </span>
       )}
 
@@ -71,11 +87,11 @@ export function ProductCard({ product }: ProductCardProps) {
           e.stopPropagation();
           setIsFavorited(!isFavorited);
         }}
-        className="absolute right-3 top-3 z-10 rounded-full bg-background/70 p-2 text-muted-foreground backdrop-blur transition hover:text-[var(--gold)]"
+        className="absolute right-3 top-3 z-10 rounded-full bg-background/70 p-2.5 text-muted-foreground backdrop-blur-sm transition-all duration-300 hover:text-[var(--gold)] hover:bg-background/90 hover:scale-110"
       >
         <Heart
-          className={`h-4 w-4 ${
-            isFavorited ? "fill-[var(--gold)] text-[var(--gold)]" : ""
+          className={`h-4 w-4 transition-all duration-300 ${
+            isFavorited ? "fill-[var(--gold)] text-[var(--gold)] scale-110" : ""
           }`}
         />
       </button>
@@ -84,18 +100,34 @@ export function ProductCard({ product }: ProductCardProps) {
       <Link to={`/produto/${product.slug}`}>
         <div className="relative aspect-[4/5] overflow-hidden bg-surface-2">
           {!imgError ? (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-              loading="lazy"
-              onError={() => setImgError(true)}
-            />
+            <>
+              {/* Primary Image */}
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
+                  isHovered && product.images[1] ? "opacity-0 scale-105" : "scale-100"
+                }`}
+                loading="lazy"
+                onError={() => setImgError(true)}
+              />
+              {/* Secondary Image on hover */}
+              {product.images[1] && (
+                <img
+                  src={product.images[1]}
+                  alt={product.name}
+                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
+                    isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  }`}
+                  loading="lazy"
+                />
+              )}
+            </>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-2 via-surface to-background p-6">
               <svg
                 viewBox="0 0 120 130"
-                className="h-32 w-32 text-[var(--gold)]/50"
+                className="h-28 w-28 text-[var(--gold)]/40"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -116,54 +148,98 @@ export function ProductCard({ product }: ProductCardProps) {
               </div>
             </div>
           )}
+
+          {/* Quick Actions Overlay */}
+          <div
+            className={`absolute inset-x-0 bottom-0 p-3 transition-all duration-300 ${
+              isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          >
+            <div className="flex gap-2">
+              <Link
+                to={`/produto/${product.slug}`}
+                className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-background/90 backdrop-blur-sm py-2.5 text-xs font-semibold text-foreground transition-colors hover:bg-[var(--gold)] hover:text-background"
+              >
+                <Eye className="h-3.5 w-3.5" />
+                <span>Visualizar</span>
+              </Link>
+              <button
+                onClick={handleAddToCart}
+                className="flex items-center justify-center rounded-lg bg-[var(--gold)] py-2.5 px-4 text-background transition-all hover:bg-[var(--gold-light)] hover:shadow-[0_0_20px_rgba(214,166,50,0.3)]"
+                aria-label="Adicionar ao carrinho"
+              >
+                <ShoppingBag className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </Link>
 
       {/* Info */}
       <Link to={`/produto/${product.slug}`} className="flex flex-1 flex-col p-4">
-        <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-          {product.club} · {product.year}
-        </p>
-        <h3 className="mt-1 line-clamp-2 font-sans text-sm font-medium text-foreground">
+        {/* Club & Year */}
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            {product.club}
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            {product.year}
+          </p>
+        </div>
+
+        {/* Name */}
+        <h3 className="mt-1.5 line-clamp-2 font-sans text-sm font-medium text-foreground leading-snug">
           {product.name}
         </h3>
-        <div className="mt-3 flex items-end justify-between">
-          <div>
-            {product.promotionalPrice ? (
-              <div>
-                <p className="text-xs text-muted-foreground line-through">
-                  R$ {product.price.toFixed(2)}
-                </p>
-                <p className="text-lg font-bold text-[var(--gold)]">
-                  R$ {product.promotionalPrice.toFixed(2)}
-                </p>
-              </div>
-            ) : (
-              <p className="text-lg font-bold text-[var(--gold)]">
+
+        {/* Rating */}
+        <div className="mt-2 flex items-center gap-1.5">
+          <div className="flex gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-3 w-3 ${
+                  star <= Math.round(product.rating)
+                    ? "fill-[var(--gold)] text-[var(--gold)]"
+                    : "fill-muted-foreground/20 text-muted-foreground/20"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[10px] text-muted-foreground">
+            ({product.reviewCount})
+          </span>
+        </div>
+
+        {/* Price */}
+        <div className="mt-3">
+          {product.promotionalPrice ? (
+            <div>
+              <p className="text-xs text-muted-foreground line-through">
                 R$ {product.price.toFixed(2)}
               </p>
-            )}
-            <p className="text-[11px] text-muted-foreground">
-              ou 12x de R$ {installmentPrice.toFixed(2)} sem juros
+              <p className="text-lg font-bold text-[var(--gold)]">
+                R$ {product.promotionalPrice.toFixed(2)}
+              </p>
+            </div>
+          ) : (
+            <p className="text-lg font-bold text-[var(--gold)]">
+              R$ {product.price.toFixed(2)}
             </p>
-          </div>
+          )}
+          <p className="text-[11px] text-muted-foreground">
+            ou 12x de R$ {installmentPrice.toFixed(2)} sem juros
+          </p>
         </div>
       </Link>
 
-      {/* Actions */}
-      <div className="px-4 pb-4 flex gap-2">
-        <Link
-          to={`/produto/${product.slug}`}
-          className="flex-1 rounded-md border border-border py-2 text-center text-xs uppercase tracking-widest text-foreground/90 transition hover:border-[var(--gold)] hover:text-[var(--gold)]"
-        >
-          Ver detalhes
-        </Link>
+      {/* Buy Button */}
+      <div className="px-4 pb-4">
         <button
-          aria-label="Adicionar ao carrinho"
           onClick={handleAddToCart}
-          className="rounded-md btn-gold px-3"
+          className="w-full rounded-lg bg-[var(--gold)] py-3 text-sm font-bold uppercase tracking-[0.15em] text-background transition-all duration-300 hover:bg-[var(--gold-light)] hover:shadow-[0_0_25px_rgba(214,166,50,0.25)] active:scale-[0.98]"
         >
-          <ShoppingBag className="h-4 w-4" />
+          Adicionar ao Carrinho
         </button>
       </div>
     </div>
