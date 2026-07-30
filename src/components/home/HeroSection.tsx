@@ -22,58 +22,68 @@ export function HeroSection() {
     <section className="relative h-screen min-h-[700px] overflow-hidden bg-[#090B0B]">
       {/* === RIGHT SIDE: Jersey Image === */}
       <div
-        className="absolute inset-0 lg:right-0 lg:left-auto lg:w-[60%] lg:top-0 lg:bottom-0"
-        style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+        className="absolute inset-0 lg:right-0 lg:left-auto lg:w-[55%] lg:top-0 lg:bottom-0"
+        style={{ transform: `translateY(${scrollY * 0.06}px)` }}
       >
-        {/* The jersey image */}
-        <div className="relative h-full w-full">
+        {/* The jersey image — reduced size, full view, repositioned */}
+        <div className="relative h-full w-full flex items-center justify-center">
           <img
             src={JERSEY_IMAGE}
             alt="Camisa retrô AC Milan 1994-1995"
-            className="h-full w-full object-cover object-center"
+            className="w-[70%] max-w-[480px] h-auto object-contain drop-shadow-2xl"
             loading="eager"
             fetchPriority="high"
             style={{
-              animation: "heroFloat 6s ease-in-out infinite",
+              animation: "heroFloat 10s ease-in-out infinite",
+              transform: "translateX(30px)",
+              filter: "drop-shadow(0 20px 60px rgba(214,166,50,0.12))",
+            }}
+          />
+
+          {/* Background ambient glow — behind the jersey */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "radial-gradient(ellipse 60% 50% at 55% 50%, rgba(214,166,50,0.04) 0%, transparent 70%)",
             }}
           />
 
           {/* Seamless blending masks */}
-          {/* Left edge fade — blends into dark background */}
+          {/* Left edge fade — stronger to blend into dark background */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(to right, #090B0B 0%, #090B0B 8%, transparent 40%)",
+              background: "linear-gradient(to right, #090B0B 0%, #090B0B 12%, transparent 50%)",
             }}
           />
-          {/* Bottom fade */}
+          {/* Bottom fade — softer */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(to top, #090B0B 0%, transparent 15%)",
+              background: "linear-gradient(to top, #090B0B 0%, transparent 12%)",
             }}
           />
-          {/* Top fade */}
+          {/* Top fade — softer */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(to bottom, #090B0B 0%, transparent 10%)",
+              background: "linear-gradient(to bottom, #090B0B 0%, transparent 8%)",
             }}
           />
-          {/* Subtle right edge fade for premium feel */}
+          {/* Right edge fade — subtle vignette */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(to left, rgba(9,11,11,0.4) 0%, transparent 20%)",
+              background: "linear-gradient(to left, rgba(9,11,11,0.5) 0%, transparent 15%)",
             }}
           />
         </div>
       </div>
 
-      {/* === LEFT SIDE: Content (40%) === */}
+      {/* === LEFT SIDE: Content (45%) === */}
       <div className="relative z-10 flex h-full items-center">
         <div className="container-vr w-full">
-          <div className="lg:max-w-[55%]">
+          <div className="lg:max-w-[50%]">
             <div
               className={`transition-all duration-[1200ms] ease-out ${
                 isVisible
@@ -127,11 +137,11 @@ export function HeroSection() {
         <div className="h-12 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/30 to-transparent" />
       </div>
 
-      {/* Floating animation keyframes */}
+      {/* Floating animation keyframes — 3px, 10s, continuous */}
       <style>{`
         @keyframes heroFloat {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-6px); }
+          0%, 100% { transform: translateX(30px) translateY(0px); }
+          50% { transform: translateX(30px) translateY(-3px); }
         }
       `}</style>
     </section>
