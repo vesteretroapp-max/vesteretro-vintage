@@ -72,7 +72,6 @@ export function ClubShieldCarousel() {
   return (
     <section className="py-20 md:py-28">
       <div className="container-vr">
-        {/* Minimal header */}
         <div className="flex items-center gap-4 mb-14">
           <div className="h-px w-12 bg-[var(--gold)]/40" />
           <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground/60">
@@ -80,48 +79,25 @@ export function ClubShieldCarousel() {
           </span>
         </div>
 
-        {/* Carousel */}
         <div className="relative group">
           {canScrollLeft && (
-            <button
-              onClick={() => scroll("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 h-12 w-12 rounded-full bg-background/80 border border-border/40 flex items-center justify-center text-foreground backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)]"
-              aria-label="Anterior"
-            >
+            <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 h-12 w-12 rounded-full bg-background/80 border border-border/40 flex items-center justify-center text-foreground backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)]" aria-label="Anterior">
               <ChevronLeft className="h-5 w-5" />
             </button>
           )}
 
           {canScrollRight && (
-            <button
-              onClick={() => scroll("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 h-12 w-12 rounded-full bg-background/80 border border-border/40 flex items-center justify-center text-foreground backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)]"
-              aria-label="Próximo"
-            >
+            <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 h-12 w-12 rounded-full bg-background/80 border border-border/40 flex items-center justify-center text-foreground backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:border-[var(--gold)]/40 hover:text-[var(--gold)]" aria-label="Próximo">
               <ChevronRight className="h-5 w-5" />
             </button>
           )}
 
-          <div
-            ref={scrollRef}
-            className="flex gap-8 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory px-1"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
+          <div ref={scrollRef} className="flex gap-8 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory px-1" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
             {clubs.map((club) => (
-              <Link
-                key={club.name}
-                to={club.slug}
-                className="group/item flex-shrink-0 snap-center"
-              >
+              <Link key={club.name} to={club.slug} className="group/item flex-shrink-0 snap-center">
                 <div className="flex flex-col items-center gap-4 w-24">
-                  <div
-                    className="relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center border border-transparent transition-all duration-500 group-hover/item:border-[var(--gold)]/30 group-hover/item:shadow-[0_0_40px_rgba(214,166,50,0.15)] group-hover/item:scale-110"
-                    style={{ backgroundColor: club.color }}
-                  >
-                    <span
-                      className="text-xs md:text-sm font-bold tracking-[0.15em]"
-                      style={{ color: club.textColor }}
-                    >
+                  <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center border border-transparent transition-all duration-500 group-hover/item:border-[var(--gold)]/30 group-hover/item:shadow-[0_0_40px_rgba(214,166,50,0.15)] group-hover/item:scale-110" style={{ backgroundColor: club.color }}>
+                    <span className="text-xs md:text-sm font-bold tracking-[0.15em]" style={{ color: club.textColor }}>
                       {club.initial}
                     </span>
                   </div>

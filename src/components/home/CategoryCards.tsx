@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
+import { LazyImage } from "@/components/ui/LazyImage";
 
 const categories = [
   {
@@ -32,7 +33,6 @@ export function CategoryCards() {
   return (
     <section className="py-24 md:py-32">
       <div className="container-vr">
-        {/* Minimal header */}
         <div className="flex items-center gap-4 mb-16">
           <div className="h-px w-12 bg-[var(--gold)]/40" />
           <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground/60">
@@ -40,28 +40,24 @@ export function CategoryCards() {
           </span>
         </div>
 
-        {/* Campaign-style grid */}
         <div className="grid gap-6 md:grid-cols-2">
           {categories.map((category, index) => (
             <Link
               key={category.title}
               to={category.href}
-              className={`group relative overflow-hidden ${
-                index === 0 ? "md:row-span-2" : ""
-              }`}
+              className={`group relative overflow-hidden ${index === 0 ? "md:row-span-2" : ""}`}
             >
               <div className={`relative overflow-hidden ${index === 0 ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
-                <img
+                <LazyImage
                   src={category.image}
                   alt={category.title}
+                  width={1200}
+                  height={index === 0 ? 1600 : 900}
                   className="h-full w-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
-                  loading="lazy"
                 />
-                {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
               </div>
 
-              {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
                 <div className="transition-transform duration-500 group-hover:translate-y-[-4px]">
                   <h3 className="font-display text-3xl md:text-4xl text-foreground">
