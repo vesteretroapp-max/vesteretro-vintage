@@ -2,6 +2,8 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const JERSEY_IMAGE = "https://i.postimg.cc/2SnM0q7H/grandes.png";
+
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -17,77 +19,121 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative h-screen min-h-[700px] overflow-hidden bg-background">
-      {/* Full-bleed hero image */}
+    <section className="relative h-screen min-h-[700px] overflow-hidden bg-[#090B0B]">
+      {/* === RIGHT SIDE: Jersey Image === */}
       <div
-        className="absolute inset-0 -z-10"
-        style={{ transform: `translateY(${scrollY * 0.12}px)` }}
+        className="absolute inset-0 lg:right-0 lg:left-auto lg:w-[60%] lg:top-0 lg:bottom-0"
+        style={{ transform: `translateY(${scrollY * 0.08}px)` }}
       >
-        <img
-          src="https://i.postimg.cc/2SnM0q7H/grandes.png"
-          alt=""
-          className="h-full w-full object-cover object-center"
-          loading="eager"
-        />
-        {/* Gradient overlays for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+        {/* The jersey image */}
+        <div className="relative h-full w-full">
+          <img
+            src={JERSEY_IMAGE}
+            alt="Camisa retrô AC Milan 1994-1995"
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            fetchPriority="high"
+            style={{
+              animation: "heroFloat 6s ease-in-out infinite",
+            }}
+          />
+
+          {/* Seamless blending masks */}
+          {/* Left edge fade — blends into dark background */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(to right, #090B0B 0%, #090B0B 8%, transparent 40%)",
+            }}
+          />
+          {/* Bottom fade */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(to top, #090B0B 0%, transparent 15%)",
+            }}
+          />
+          {/* Top fade */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(to bottom, #090B0B 0%, transparent 10%)",
+            }}
+          />
+          {/* Subtle right edge fade for premium feel */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(to left, rgba(9,11,11,0.4) 0%, transparent 20%)",
+            }}
+          />
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="relative flex h-full items-center">
+      {/* === LEFT SIDE: Content (40%) === */}
+      <div className="relative z-10 flex h-full items-center">
         <div className="container-vr w-full">
-          <div
-            className={`max-w-2xl transition-all duration-1000 ease-out ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-12"
-            }`}
-          >
-            {/* Minimal eyebrow */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-px w-16 bg-[var(--gold)]" />
-              <span className="text-[11px] uppercase tracking-[0.4em] text-[var(--gold)] font-medium">
-                VesteRetro
-              </span>
-            </div>
+          <div className="lg:max-w-[55%]">
+            <div
+              className={`transition-all duration-[1200ms] ease-out ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              {/* Eyebrow */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="h-px w-14 bg-[var(--gold)]/60" />
+                <span className="text-[11px] uppercase tracking-[0.4em] text-[var(--gold)] font-medium">
+                  VesteRetro
+                </span>
+              </div>
 
-            {/* Main headline — minimal, impactful */}
-            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.95] tracking-tight">
-              <span className="block text-foreground">Vista a</span>
-              <span className="block text-gradient-gold italic mt-2">História.</span>
-            </h1>
+              {/* Headline */}
+              <h1 className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-[6.5rem] leading-[0.92] tracking-tight">
+                <span className="block text-foreground">Vista a</span>
+                <span className="block text-gradient-gold italic mt-1">História.</span>
+              </h1>
 
-            {/* Subtle subtitle */}
-            <p className="mt-8 max-w-md text-sm md:text-base leading-relaxed text-muted-foreground/80">
-              Camisas retrô dos maiores clubes do mundo.
-            </p>
+              {/* Subtitle */}
+              <p className="mt-8 max-w-sm text-sm md:text-base leading-relaxed text-muted-foreground/70">
+                Camisas retrô dos maiores clubes do mundo.
+              </p>
 
-            {/* Refined CTAs */}
-            <div className="mt-10 flex items-center gap-6">
-              <Link
-                to="/todos-os-produtos"
-                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)] transition-all duration-300"
-              >
-                Explorar coleção
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
-              </Link>
-              <div className="h-4 w-px bg-border" />
-              <Link
-                to="/lancamentos"
-                className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300"
-              >
-                Lançamentos
-              </Link>
+              {/* CTAs */}
+              <div className="mt-10 flex items-center gap-6">
+                <Link
+                  to="/todos-os-produtos"
+                  className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--gold)] transition-all duration-300"
+                >
+                  Explorar coleção
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
+                </Link>
+                <div className="h-4 w-px bg-border/50" />
+                <Link
+                  to="/lancamentos"
+                  className="text-sm uppercase tracking-[0.15em] text-muted-foreground/50 hover:text-foreground transition-colors duration-300"
+                >
+                  Lançamentos
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Minimal scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-        <div className="h-12 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/40 to-transparent" />
+      {/* Scroll indicator */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
+        <div className="h-12 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/30 to-transparent" />
       </div>
+
+      {/* Floating animation keyframes */}
+      <style>{`
+        @keyframes heroFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+      `}</style>
     </section>
   );
 }
