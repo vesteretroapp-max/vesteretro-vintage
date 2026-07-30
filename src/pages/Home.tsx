@@ -6,6 +6,7 @@ import { ProductShowcase } from "@/components/home/ProductShowcase";
 import { PremiumBanner } from "@/components/home/PremiumBanner";
 import { ReviewsSection } from "@/components/home/ReviewsSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { demoProducts } from "@/data/products";
 
 export default function Home() {
@@ -36,71 +37,93 @@ export default function Home() {
 
   return (
     <div>
-      {/* 1. HERO — Campaign-style, full-screen */}
+      {/* 1. HERO — Campaign-style, full-screen (no reveal — always visible) */}
       <HeroSection />
 
       {/* 2. BENEFITS — Ultra-minimal */}
-      <BenefitsBar />
+      <ScrollReveal delay={100} direction="none">
+        <BenefitsBar />
+      </ScrollReveal>
 
       {/* 3. CATEGORIES — Campaign-style cards */}
-      <CategoryCards />
+      <ScrollReveal delay={100}>
+        <CategoryCards />
+      </ScrollReveal>
 
       {/* 4. CLUB SHIELDS — Elegant carousel */}
-      <ClubShieldCarousel />
+      <ScrollReveal delay={100}>
+        <ClubShieldCarousel />
+      </ScrollReveal>
 
       {/* 5. MAIS VENDIDAS — Featured products */}
-      <ProductShowcase
-        eyebrow="Mais procurados"
-        title="Mais Vendidas"
-        href="/todos-os-produtos"
-        linkText="Ver todas"
-        products={maisVendidas}
-      />
+      <ScrollReveal delay={100}>
+        <ProductShowcase
+          eyebrow="Mais procurados"
+          title="Mais Vendidas"
+          href="/todos-os-produtos"
+          linkText="Ver todas"
+          products={maisVendidas}
+        />
+      </ScrollReveal>
 
       {/* 6. CLUBES BRASILEIROS */}
-      <ProductShowcase
-        eyebrow="Clubes do Brasil"
-        title="Camisas Brasileiras"
-        href="/clubes-do-brasil"
-        linkText="Ver todos"
-        products={brasileiros}
-      />
+      <ScrollReveal delay={100}>
+        <ProductShowcase
+          eyebrow="Clubes do Brasil"
+          title="Camisas Brasileiras"
+          href="/clubes-do-brasil"
+          linkText="Ver todos"
+          products={brasileiros}
+        />
+      </ScrollReveal>
 
       {/* 7. INSTITUTIONAL BANNER — Emotional */}
-      <PremiumBanner />
+      <ScrollReveal delay={200} duration={1000}>
+        <PremiumBanner />
+      </ScrollReveal>
 
       {/* 8. CLUBES EUROPEUS */}
-      <ProductShowcase
-        eyebrow="Clubes da Europa"
-        title="Camisas Europeias"
-        href="/clubes-do-mundo"
-        linkText="Ver todos"
-        products={europeus}
-      />
+      <ScrollReveal delay={100}>
+        <ProductShowcase
+          eyebrow="Clubes da Europa"
+          title="Camisas Europeias"
+          href="/clubes-do-mundo"
+          linkText="Ver todos"
+          products={europeus}
+        />
+      </ScrollReveal>
 
       {/* 9. CAMISAS RETRÔ */}
-      <ProductShowcase
-        eyebrow="Retrô"
-        title="Camisas Retrô"
-        href="/retro"
-        linkText="Ver todas"
-        products={retro}
-      />
+      <ScrollReveal delay={100}>
+        <ProductShowcase
+          eyebrow="Retrô"
+          title="Camisas Retrô"
+          href="/retro"
+          linkText="Ver todas"
+          products={retro}
+        />
+      </ScrollReveal>
 
       {/* 10. NOVIDADES */}
-      <ProductShowcase
-        eyebrow="Chegaram agora"
-        title="Novidades"
-        href="/lancamentos"
-        linkText="Ver todos"
-        products={novidades}
-      />
+      <ScrollReveal delay={100}>
+        <ProductShowcase
+          eyebrow="Chegaram agora"
+          title="Novidades"
+          href="/lancamentos"
+          linkText="Ver todos"
+          products={novidades}
+        />
+      </ScrollReveal>
 
       {/* 11. DEPOIMENTOS — Clean, no photos */}
-      <ReviewsSection />
+      <ScrollReveal delay={100}>
+        <ReviewsSection />
+      </ScrollReveal>
 
       {/* 12. NEWSLETTER — Minimalist */}
-      <NewsletterSection />
+      <ScrollReveal delay={100}>
+        <NewsletterSection />
+      </ScrollReveal>
     </div>
   );
 }
