@@ -84,12 +84,14 @@ export function Header() {
           aria-label="VesteRetro — Início"
           className="shrink-0"
         >
-          <img
-            src={LOGO_URL}
-            alt="VesteRetro — Vista a História"
-            className="h-[50px] w-auto max-w-[210px] shrink-0 object-contain mix-blend-lighten md:h-[58px] md:max-w-[245px] lg:h-[68px] lg:max-w-[290px] xl:h-[76px] xl:max-w-[330px]"
-            loading="eager"
-          />
+          <div className="logo-container">
+            <img
+              src={LOGO_URL}
+              alt="VesteRetro — Vista a História"
+              className="logo-img"
+              loading="eager"
+            />
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

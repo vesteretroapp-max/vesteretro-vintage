@@ -17,12 +17,14 @@ export function Footer() {
         {/* Brand */}
         <div>
           <Link to="/">
-            <img
-              src={LOGO_URL}
-              alt="VesteRetro — Vista a História"
-              className="h-28 w-auto mix-blend-lighten"
-              loading="lazy"
-            />
+            <div className="logo-container">
+              <img
+                src={LOGO_URL}
+                alt="VesteRetro — Vista a História"
+                className="logo-img"
+                loading="lazy"
+              />
+            </div>
           </Link>
           <p className="mt-4 font-display text-lg italic text-[var(--gold)]">
             Vista a História.
