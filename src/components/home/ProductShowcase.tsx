@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { HorizontalCarousel } from "@/components/HorizontalCarousel";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductCardSkeleton } from "@/components/ui/ProductCardSkeleton";
 import type { Product } from "@/data/products";
 
 interface ProductShowcaseProps {
@@ -12,6 +13,7 @@ interface ProductShowcaseProps {
   linkText?: string;
   products: Product[];
   showCount?: number;
+  loading?: boolean;
 }
 
 export function ProductShowcase({
@@ -22,15 +24,47 @@ export function ProductShowcase({
   linkText = "Ver todos",
   products,
   showCount,
+  loading = false,
 }: ProductShowcaseProps) {
   const displayProducts = showCount ? products.slice(0, showCount) : products;
 
-  if (displayProducts.length === 0) return null;
+  // Show skeleton when loading or no products yet
+  if (loading || displayProducts.length === 0) {
+    return (
+      <section className="py-20 md:py-28">
+        <div className="container-vr">
+          {/* Header skeleton */}
+          <div className="flex items-end justify-between gap-4 mb-14">
+            <div className="flex-1 space-y-3">
+              <div className="flex items-center gap-4">
+                <div className="h-px w-12 bg-white/5" />
+                <div className="h-2.5 w-24 rounded bg-white/5 animate-pulse" />
+              </div>
+              <div className="h-8 w-48 rounded bg-white/5 animate-pulse" />
+            </div>
+          </div>
+
+          {/* Cards skeleton */}
+          <div className="flex gap-4 overflow-hidden">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={i}
+                className="shrink-0"
+                style={{ width: "calc((100% - 64px) / 5)", minWidth: "220px" }}
+              >
+                <ProductCardSkeleton />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 md:py-28">
       <div className="container-vr">
-        {/* Section Header — minimal */}
+        {/* Section Header */}
         <div className="flex items-end justify-between gap-4 mb-14">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-4 mb-4">
