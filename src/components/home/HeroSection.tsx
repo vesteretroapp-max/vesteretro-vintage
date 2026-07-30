@@ -35,7 +35,7 @@ export function HeroSection() {
             fetchPriority="high"
             style={{
               animation: "heroFloat 10s ease-in-out infinite",
-              transform: "translateX(30px)",
+              transform: "translateX(-40px)",
               filter: "drop-shadow(0 20px 60px rgba(214,166,50,0.12))",
             }}
           />
@@ -140,8 +140,8 @@ export function HeroSection() {
       {/* Floating animation keyframes — 3px, 10s, continuous */}
       <style>{`
         @keyframes heroFloat {
-          0%, 100% { transform: translateX(30px) translateY(0px); }
-          50% { transform: translateX(30px) translateY(-3px); }
+          0%, 100% { transform: translateX(-40px) translateY(0px); }
+          50% { transform: translateX(-40px) translateY(-3px); }
         }
       `}</style>
     </section>
