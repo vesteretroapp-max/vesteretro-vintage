@@ -270,6 +270,50 @@ const schema = defineSchema(
       isActive: v.boolean(),
     })
       .index("active", ["isActive", "order"]),
+
+    // Payments (Mercado Pago integration)
+    payments: defineTable({
+      orderId: v.id("orders"),
+      provider: v.string(),
+      externalPaymentId: v.string(),
+      externalReference: v.optional(v.string()),
+      paymentMethod: v.string(),
+      status: v.string(),
+      amount: v.number(),
+      currency: v.optional(v.string()),
+      installments: v.optional(v.number()),
+      installmentAmount: v.optional(v.number()),
+      pixQrCode: v.optional(v.string()),
+      pixQrCodeBase64: v.optional(v.string()),
+      pixExpiration: v.optional(v.string()),
+      boletoUrl: v.optional(v.string()),
+      boletoBarcode: v.optional(v.string()),
+      boletoExpiration: v.optional(v.string()),
+      gatewayResponse: v.optional(v.string()),
+      paidAt: v.optional(v.number()),
+      cancelledAt: v.optional(v.number()),
+      refundedAt: v.optional(v.number()),
+      isTest: v.boolean(),
+    })
+      .index("orderId", ["orderId"])
+      .index("externalPaymentId", ["externalPaymentId"])
+      .index("externalReference", ["externalReference"])
+      .index("status", ["status"]),
+
+    // Webhook events (idempotency)
+    webhookEvents: defineTable({
+      provider: v.string(),
+      eventType: v.string(),
+      externalId: v.optional(v.string()),
+      payload: v.string(),
+      processed: v.boolean(),
+      processingError: v.optional(v.string()),
+      createdAt: v.number(),
+      processedAt: v.optional(v.number()),
+    })
+      .index("externalId", ["externalId"])
+      .index("provider", ["provider"])
+      .index("processed", ["processed"]),
   },
   {
     schemaValidation: false,
