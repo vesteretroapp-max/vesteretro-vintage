@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Heart, ShoppingBag, Eye, Star } from "lucide-react";
 import { LazyImage } from "@/components/ui/LazyImage";
 import type { Product } from "@/data/products";
+import { FALLBACK_IMAGE } from "@/lib/product-images";
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +13,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [secondImgError, setSecondImgError] = useState(false);
 
   const discount = product.promotionalPrice
     ? Math.round(
@@ -71,22 +73,22 @@ export function ProductCard({ product }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/produto/${product.slug}`} className="block">
-        <div className="relative aspect-[3/4] overflow-hidden bg-[#0e1010]">
+        <div className="relative aspect-[3/4] overflow-hidden bg-[#0e1010] group">
           {!imgError ? (
             <>
               <LazyImage
-                src={product.images[0]}
+                src={product.images[0] || FALLBACK_IMAGE}
                 alt={product.name}
                 width={450}
                 height={600}
                 className={`absolute inset-0 h-full w-full object-cover transition-all duration-[600ms] ease-out ${
-                  isHovered && product.images[1]
+                  isHovered && product.images[1] && !secondImgError
                     ? "opacity-0 scale-[1.03]"
                     : "scale-100"
                 }`}
                 onError={() => setImgError(true)}
               />
-              {product.images[1] && (
+              {product.images[1] && !secondImgError && (
                 <LazyImage
                   src={product.images[1]}
                   alt={product.name}
@@ -95,6 +97,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   className={`absolute inset-0 h-full w-full object-cover transition-all duration-[600ms] ease-out ${
                     isHovered ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"
                   }`}
+                  onError={() => setSecondImgError(true)}
                 />
               )}
             </>
