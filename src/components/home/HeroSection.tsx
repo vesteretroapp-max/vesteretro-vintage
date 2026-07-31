@@ -30,7 +30,7 @@ export function HeroSection() {
         <img
           src={HERO_IMAGE}
           alt="VesteRetro — Camisas retrô e atuais dos maiores clubes do futebol mundial"
-          className="h-full w-full object-cover object-center"
+          className="w-[90%] h-[88%] object-contain object-center"
           style={{
             objectPosition: "center 30%",
           }}
