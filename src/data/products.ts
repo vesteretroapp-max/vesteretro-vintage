@@ -17,6 +17,8 @@ export interface Product {
   imagePath?: string;
   /** Caminho relativo da segunda imagem (hover) no Supabase Storage. */
   imagePathHover?: string;
+  /** Caminho relativo da terceira imagem (costas/back) no Supabase Storage. */
+  imagePathBack?: string;
   sizes: { size: string; sku: string; stock: number }[];
   isNew?: boolean;
   isBestSeller?: boolean;
@@ -777,6 +779,7 @@ export const demoProducts: Product[] = [
     images: [P12, U1, P4],
     imagePath: "corinthians/1994-home/hero.webp.webp",
     imagePathHover: "corinthians/1994-home/front.webp.webp",
+    imagePathBack: "corinthians/1994-home/back.webp.webp",
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,

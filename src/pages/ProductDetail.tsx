@@ -49,13 +49,16 @@ export default function ProductDetail() {
   // Resolve imagens via API oficial do Supabase Storage (campo image_path)
   // com fallback para as imagens locais/demo existentes.
   const resolvedImages =
-    product.imagePath || product.imagePathHover
+    product.imagePath || product.imagePathHover || product.imagePathBack
       ? [
           ...(product.imagePath
             ? [getProductImageUrl(product.imagePath) || product.images[0]]
             : []),
           ...(product.imagePathHover
             ? [getProductImageUrl(product.imagePathHover) || product.images[1]]
+            : []),
+          ...(product.imagePathBack
+            ? [getProductImageUrl(product.imagePathBack) || product.images[2]]
             : []),
         ].filter((src): src is string => Boolean(src))
       : product.images;

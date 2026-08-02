@@ -81,6 +81,7 @@ const schema = defineSchema(
       // Caminho relativo da imagem no Supabase Storage (bucket product-images)
       imagePath: v.optional(v.string()),
       imagePathHover: v.optional(v.string()),
+      imagePathBack: v.optional(v.string()),
     })
       .index("slug", ["slug"])
       .index("category", ["category"])

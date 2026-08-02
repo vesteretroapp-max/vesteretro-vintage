@@ -162,6 +162,7 @@ export const create = mutation({
     decade: v.number(),
     imagePath: v.optional(v.string()),
     imagePathHover: v.optional(v.string()),
+    imagePathBack: v.optional(v.string()),
     images: v.optional(v.array(v.string())),
     variants: v.optional(
       v.array(
@@ -231,6 +232,7 @@ export const update = mutation({
     decade: v.optional(v.number()),
     imagePath: v.optional(v.string()),
     imagePathHover: v.optional(v.string()),
+    imagePathBack: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);

@@ -98,6 +98,7 @@ export type Product = {
    *  Ex.: "corinthians/1994-home/hero.webp.webp" */
   image_path: string | null;
   image_path_hover: string | null;
+  image_path_back: string | null;
   seo_title: string | null;
   seo_description: string | null;
   seo_keywords: string | null;
