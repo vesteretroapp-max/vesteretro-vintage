@@ -78,6 +78,9 @@ const schema = defineSchema(
       tags: v.optional(v.array(v.string())),
       decade: v.number(),
       importedFrom: v.optional(v.string()),
+      // Caminho relativo da imagem no Supabase Storage (bucket product-images)
+      imagePath: v.optional(v.string()),
+      imagePathHover: v.optional(v.string()),
     })
       .index("slug", ["slug"])
       .index("category", ["category"])

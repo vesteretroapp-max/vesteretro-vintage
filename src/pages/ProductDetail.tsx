@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { demoProducts } from "@/data/products";
+import { getProductImageUrl } from "@/lib/supabase-storage";
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -44,6 +45,21 @@ export default function ProductDetail() {
       </div>
     );
   }
+
+  // Resolve imagens via API oficial do Supabase Storage (campo image_path)
+  // com fallback para as imagens locais/demo existentes.
+  const resolvedImages =
+    product.imagePath || product.imagePathHover
+      ? [
+          ...(product.imagePath
+            ? [getProductImageUrl(product.imagePath) || product.images[0]]
+            : []),
+          ...(product.imagePathHover
+            ? [getProductImageUrl(product.imagePathHover) || product.images[1]]
+            : []),
+        ].filter((src): src is string => Boolean(src))
+      : product.images;
+  const galleryImages = resolvedImages.length > 0 ? resolvedImages : product.images;
 
   const currentPrice = product.promotionalPrice || product.price;
   const installmentPrice = currentPrice / 12;
@@ -79,7 +95,7 @@ export default function ProductDetail() {
         productId: product.id,
         name: product.name,
         price: currentPrice,
-        image: product.images[0],
+        image: galleryImages[0],
         size: selectedSize,
         quantity,
         slug: product.slug,
@@ -139,7 +155,7 @@ export default function ProductDetail() {
             <div className="relative aspect-[4/5] bg-surface border border-border rounded-sm overflow-hidden group">
               {!imgError.has(selectedImage) ? (
                 <img
-                  src={product.images[selectedImage]}
+                  src={galleryImages[selectedImage]}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   onError={() => setImgError((prev) => new Set([...prev, selectedImage]))}
@@ -183,7 +199,7 @@ export default function ProductDetail() {
 
             {/* Thumbnails */}
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {product.images.map((img, i) => (
+              {galleryImages.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setSelectedImage(i)}

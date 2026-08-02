@@ -160,6 +160,8 @@ export const create = mutation({
     legendaryPlayers: v.optional(v.array(v.string())),
     tags: v.optional(v.array(v.string())),
     decade: v.number(),
+    imagePath: v.optional(v.string()),
+    imagePathHover: v.optional(v.string()),
     images: v.optional(v.array(v.string())),
     variants: v.optional(
       v.array(
@@ -227,6 +229,8 @@ export const update = mutation({
     competition: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     decade: v.optional(v.number()),
+    imagePath: v.optional(v.string()),
+    imagePathHover: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);

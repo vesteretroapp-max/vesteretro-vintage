@@ -4,6 +4,7 @@ import { Heart, ShoppingBag, Eye, Star } from "lucide-react";
 import { LazyImage } from "@/components/ui/LazyImage";
 import type { Product } from "@/data/products";
 import { FALLBACK_IMAGE } from "@/lib/product-images";
+import { getProductImageUrl } from "@/lib/supabase-storage";
 
 interface ProductCardProps {
   product: Product;
@@ -23,6 +24,15 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const installmentPrice = (product.promotionalPrice || product.price) / 12;
 
+  // Resolve imagens via API oficial do Supabase Storage (campo image_path)
+  // com fallback para as imagens locais/demo existentes.
+  const mainImageSrc = product.imagePath
+    ? getProductImageUrl(product.imagePath) || product.images[0] || FALLBACK_IMAGE
+    : product.images[0] || FALLBACK_IMAGE;
+  const hoverImageSrc = product.imagePathHover
+    ? getProductImageUrl(product.imagePathHover)
+    : product.images[1] || "";
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -38,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
         productId: product.id,
         name: product.name,
         price: product.promotionalPrice || product.price,
-        image: product.images[0],
+        image: mainImageSrc,
         size: "M",
         quantity: 1,
         slug: product.slug,
@@ -77,20 +87,20 @@ export function ProductCard({ product }: ProductCardProps) {
           {!imgError ? (
             <>
               <LazyImage
-                src={product.images[0] || FALLBACK_IMAGE}
+                src={mainImageSrc}
                 alt={product.name}
                 width={450}
                 height={600}
                 className={`absolute inset-0 h-full w-full object-cover transition-all duration-[600ms] ease-out ${
-                  isHovered && product.images[1] && !secondImgError
+                  isHovered && hoverImageSrc && !secondImgError
                     ? "opacity-0 scale-[1.03]"
                     : "scale-100"
                 }`}
                 onError={() => setImgError(true)}
               />
-              {product.images[1] && !secondImgError && (
+              {hoverImageSrc && !secondImgError && (
                 <LazyImage
-                  src={product.images[1]}
+                  src={hoverImageSrc}
                   alt={product.name}
                   width={450}
                   height={600}

@@ -20,6 +20,14 @@ import {
   X,
 } from "lucide-react";
 import { demoProducts, type Product } from "@/data/products";
+import { getProductImageUrl } from "@/lib/supabase-storage";
+
+// Resolve a miniatura do produto via API oficial do Supabase Storage
+// (campo image_path) com fallback para imagens locais/demo.
+const productThumb = (p: Product) =>
+  p.imagePath
+    ? getProductImageUrl(p.imagePath) || p.images[0]
+    : p.images[0];
 
 type StatusFilter = "all" | "active" | "draft" | "inactive";
 
@@ -290,7 +298,7 @@ export default function AdminProductsPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-[#181B1B] rounded-sm overflow-hidden shrink-0">
                           <img
-                            src={product.images[0]}
+                            src={productThumb(product)}
                             alt=""
                             className="w-full h-full object-cover"
                           />
@@ -423,7 +431,7 @@ export default function AdminProductsPage() {
               <div className="flex gap-3">
                 <div className="w-14 h-14 bg-[#181B1B] rounded-sm overflow-hidden shrink-0">
                   <img
-                    src={product.images[0]}
+                    src={productThumb(product)}
                     alt=""
                     className="w-full h-full object-cover"
                   />

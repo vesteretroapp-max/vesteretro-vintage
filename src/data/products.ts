@@ -12,6 +12,11 @@ export interface Product {
   price: number;
   promotionalPrice?: number;
   images: string[];
+  /** Caminho relativo da imagem no Supabase Storage (bucket product-images).
+   *  Ex.: "corinthians/1994-home/hero.webp.webp" */
+  imagePath?: string;
+  /** Caminho relativo da segunda imagem (hover) no Supabase Storage. */
+  imagePathHover?: string;
   sizes: { size: string; sku: string; stock: number }[];
   isNew?: boolean;
   isBestSeller?: boolean;
@@ -770,6 +775,8 @@ export const demoProducts: Product[] = [
       "O preto e branco do Timão. A camisa que representa a paixão da Fiel Torcida.",
     price: 159.9,
     images: [P12, U1, P4],
+    imagePath: "corinthians/1994-home/hero.webp.webp",
+    imagePathHover: "corinthians/1994-home/front.webp.webp",
     sizes: generateSizes(),
     isNew: true,
     isBestSeller: false,

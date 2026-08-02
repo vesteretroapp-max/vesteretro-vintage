@@ -94,6 +94,10 @@ export type Product = {
   player_model_description: string | null;
   image_url: string | null;
   image_hover_url: string | null;
+  /** Caminho relativo da imagem no Supabase Storage (bucket product-images).
+   *  Ex.: "corinthians/1994-home/hero.webp.webp" */
+  image_path: string | null;
+  image_path_hover: string | null;
   seo_title: string | null;
   seo_description: string | null;
   seo_keywords: string | null;
